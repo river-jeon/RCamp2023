@@ -15,6 +15,8 @@ knitr::opts_chunk$set(echo = TRUE)
 3. The Basics 
 4. R Objects 
 
+Please find the most updated materials here: https://github.com/CeciliaYSui/RCamp2022
+
 # 1. Why should we learn R?
 
 * R is the language of data science both in academia and industry. (most commonly used)
@@ -132,8 +134,11 @@ Once you get the hang of the command line, you can easily do anything in R that 
 2 * 3   
 4 - 1   
 6 / (4 - 1)   
+
 2 ^ 3
 2 ** 3
+'^'(2,3)
+
 3 + 3 * 20
 (3+3) *20
 ```
@@ -151,6 +156,8 @@ Brackets(), Exponents ^, Division / and Multiplication *, Addition + and Subtrac
 ### This is still a comment. 
 ### Comment again. ####### 
 
+# line 1 
+# line 2
 ```
 
 
@@ -162,21 +169,31 @@ That’s the basic interface for executing R code in RStudio. Think you have it?
 2. Multiply the result by 3.
 3. Subtract 6 from the answer.
 4. Divide what you get by 3.
+```{r}
+37 + 2
+39 * 3
+117 - 6
+111 /3
+```
+
 
 
 ## 3.3 Example: A Virtual Die
 Now that you know how to use R, let’s use it to make a virtual die together. The : operator gives you a nice way to create a group of numbers from one to six. The : operator returns its results as a vector, a one-dimensional set of numbers:
 ```{r}
 1:6
+start : end 
 ```
 
 Running 1:6 generated a vector of numbers for you to see, but it did not save that vector anywhere in your computer's memory. What you are looking at is basically the footprints of six numbers that existed briefly and then melted back into your computer’s RAM. If you want to use those numbers again, you’ll have to ask your computer to save them somewhere. You can do that by creating an R object.
 
 R lets you save data by storing it inside an R object. What is an object? Just a name that you can use to call up stored data. For example, you can save data into an object like a or b. Wherever R encounters the object, it will replace it with the data saved inside, like so:
 ```{r}
-a <- 1 # assignment statement
+a <- 1 # assignment statement <- or =  
 a
 a + 2
+a
+b = a + 2
 a
 ```      
 
@@ -195,15 +212,17 @@ var <- 0
 Var <- 1
 var + 1
 Var + 1
+vAR = 10
+vaR = 100
 ```
 
 
 Finally, R will overwrite any previous information stored in an object without asking you for permission. So, it is a good idea to not use names that are already taken. The same goes for functions.
 ```{r}
-my_number <- 1
-my_number 
-my_number <- 999
-my_number
+my_number0 <- 1
+my_number0 
+my_number1 <- 999
+my_number1
 ```
 
 You can see which object names you have already used with the function ls().
@@ -215,6 +234,7 @@ You can also see which names you have used by examining RStudio’s environment 
 Let's create a vector called die that contains the numbers one through six. 
 ```{r}
 die <- 1:6
+die = 1:6
 die
 # R is case-sensitive, so die and DIE are two different vectors 
 DIE <- 5:8
@@ -235,8 +255,9 @@ die - 1
 
 When you use two or more vectors in an operation, R will line up the vectors and perform a sequence of individual operations. For example, when you run die * die, R lines up the two die vectors and then multiplies the first element of vector 1 by the first element of vector 2. R then multiplies the second element of vector 1 by the second element of vector 2, and so on, until every element has been multiplied. The result will be a new vector the same length as the first two.
 ```{r}
-die
-die * die
+die = 1:6
+die - 1
+die * (die-1)
 ```
 
 
@@ -249,6 +270,7 @@ If you give R two vectors of unequal lengths, R will repeat the shorter vector u
 die
 
 die + 1:2
+
 
 die + 1:4
 ```
@@ -268,6 +290,7 @@ Don’t worry if you’re not familiar with these operations. They are easy to l
 help("%*%")
 ?mean
 help("+")
+
 ```
 
 ## \textcolor{red}{In-class exercises 1.3:}
@@ -308,7 +331,8 @@ We will start with the very basics. The most simple type of object in R is an at
 
 An atomic vector is just a simple vector of data. In fact, you have already encountered an atomic vector from making the die that contains numbers one through six. You can make an atomic vector by grouping some values of data together with c():
 ```{r}
-die <- c(1, 2, 3, 4, 5, 6)
+die <- 1:6 # "integer"
+die <- c(1, 2, 3, 4, 5, 6) # "double"
 die
 
 # is.vector tests whether an object is an atomic vector. 
@@ -322,8 +346,8 @@ five <- 5
 five
 is.vector(five)
 # length returns the length of an atomic vector.
-length(five)
-length(die)
+length(five) # 1
+length(die) 
 ```
 
 Each atomic vector stores its values as a one-dimensional vector, and each atomic vector can only store one type of data. You can save different types of data in R by using different types of atomic vectors. Altogether, R recognizes six basic types of atomic vectors: doubles, integers, characters, logicals, complex, and raw.
@@ -331,27 +355,36 @@ Each atomic vector stores its values as a one-dimensional vector, and each atomi
 To create your card deck, you will need to use different types of atomic vectors to save different types of information (text and numbers). You can do this by using some simple conventions when you enter your data. For example, you can create a character vector by surrounding your input in quotation marks:
 
 ```{r}
+num <- 13 # double by default. 
 text <- "ace"
 ```
 
 Each type of atomic vector has its own convention (described below). R will recognize the convention and use it to create an atomic vector of the appropriate type. If you’d like to make atomic vectors that have more than one element in them, you can combine an element with the c() function from Packages and Help Pages. Use the same convention with each element:
 ```{r}
 text <- c("ace", "hearts")
+num <- c(1,2,3,4,5,6,10)
 ```
 
 You may wonder why R uses multiple types of vectors. Vector types help R behave as you would expect. For example, R will do math with atomic vectors that contain numbers, but not with atomic vectors that contain character strings:
 ```{r}
 sum(die)
+die
 ```
+
 ```{r eval = FALSE}
 sum(text)
+sum("ace")
 # Error in sum(text) : invalid 'type' (character) of argument
-# charToRaw()
+# 
+charToRaw("10")
+# 
 ```
 
 ### 4.1.1 Doubles
 A double vector stores regular numbers. The numbers can be positive or negative, large or small, and have digits to the right of the decimal place or not. In general, R will save any number that you type in R as a double by default. 
 ```{r}
+.5
+0.5
 die <- c(1, 2, 3, 4, 5, 6)
 # typeof() tells us what type of object an object is 
 typeof(die)
@@ -375,6 +408,7 @@ The individual elements of a character vector are known as strings. Note that a 
 ```{r}
 text <- c("123456", "Hi!", "/ This is the division symbol.")
 text
+typeof(text)
 ```
 
 
@@ -383,15 +417,16 @@ text
 Logical vectors store TRUEs and FALSEs, R’s form of Boolean data. Logicals are very helpful for doing things like comparisons:
 ```{r}
 3 > 4
-sqrt(2)^2 - 2  == 0  # Be careful of floating-point error due to R's limitation on storing doubles.
+sqrt(2)^2 - 2  == 0 # Be careful of floating-point error due to R's limitation on storing doubles.
 ```
 
 Any time you type TRUE or FALSE in capital letters (without quotation marks), R will treat your input as logical data. R also assumes that T and F are shorthand for TRUE and FALSE, unless they are defined elsewhere (e.g. T <- 500). Since the meaning of T and F can change, its best to stick with TRUE and FALSE. It is also good practice to not name your variables T or F if possible. 
 ```{r}
+F = FALSE
 logic <- c(TRUE, FALSE, TRUE)
 logic
 typeof(logic)
-typeof(F)
+typeof(FALSE)
 typeof(TRUE)
 ```
 
@@ -402,6 +437,9 @@ An attribute is a piece of information that you can attach to an atomic vector o
 
 You can see which attributes an object has with attributes. attributes() will return NULL if an object has no attributes. An atomic vector, like die, won’t have any attributes unless you give it some:
 ```{r}
+a <- 1
+a
+die <- 1:6
 attributes(die)
 # R uses NULL to represent the null set, an empty object. 
 # NULL is often returned by functions whose values are undefined. 
@@ -419,14 +457,17 @@ You can given a "names" attribute to die like this:
 ```{r}
 # The vector should include one name for each element in die
 names(die) <- c("one", "two", "three", "four", "five", "six")
+
 # Now die has a names attribute
 attributes(die)
+die
 ```
 
 To remove the names attribute, set it to NULL:
 ```{r}
 names(die) <- NULL
 names(die)
+die
 ```
 
 
@@ -435,6 +476,7 @@ names(die)
 Atomic vectors are 1-dimensional. You can get the length of them via the function length(). 
 ```{r}
 length(die)
+
 ```
 
 You can transform an atomic vector into an n-dimensional array by giving it a dimensions attribute with dim.
@@ -453,7 +495,9 @@ You don’t have much control over how R reorganizes the values into rows and co
 ## 4.3 Matrices 
 Matrices store values in a two-dimensional array, just like a matrix from linear algebra that we learned in Math Modeling. To create one, first give matrix an atomic vector to reorganize into a matrix. Then, define how many rows should be in the matrix by setting the nrow argument to a number. matrix will organize your vector of values into a matrix with the specified number of rows. Alternatively, you can set the ncol argument, which tells R how many columns to include in the matrix:
 ```{r}
-m <- matrix(die, nrow = 2)
+die = 1:6
+die
+m <- matrix(die, nrow = 2, byrow = FALSE)
 m
 ```
 
@@ -466,6 +510,7 @@ m
 You can also create a matrix by providing the numbers directly like this: 
 ```{r}
 matrix(1,3,2) # This creates a 3 by 2 unit matrix
+# (value, row, col)
 matrix(0,4,3) # This creates a 4 by 3 zero matrix
 ```
 
@@ -485,6 +530,7 @@ dim(A)
 ### 4.3.3 Matrix Addition & Subtraction
 ```{r}
 B <- matrix(c(1,4,-2,1,2,1),3,2)
+A
 B
 A + B
 A - B
@@ -492,7 +538,10 @@ A - B
 ### 4.3.4 Matrix Multiplication
 ```{r}
 C <- matrix(c(2,-2,1,2,3,1),2,3)
+A
 C
+dim(C)
+dim(A)
 C %*% A
 A %*% C
 ```
@@ -515,6 +564,7 @@ solve(D)
 
 ### 4.3.7 Determinant of a Matrix
 ```{r}
+D
 det(D)
 ```
 
@@ -542,8 +592,6 @@ rbind(A,B)
 5. Find the determinant of M. 
 6. Transpose M. 
 7. Does M have an inverse? If so, find the inverse of M. If not, explain why.
-
-
 
 
 
