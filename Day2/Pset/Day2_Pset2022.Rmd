@@ -28,7 +28,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 5. Load the data from the "resources.csv" file, and store it in a dataframe named resources. This dataset is from the paper ``Does Oil Hinder Democracy?'' by Michael L. Ross (2001). 
 
-6. Find the dimension of TFR. How many observations and variables? What are the names of these variables (colnames)? 
+6. Find the dimension of resources. How many observations and how many variables does it have? What are the names of these variables? 
 
 
 7. Can you get the structure of the dataframe? 
@@ -55,7 +55,7 @@ knitr::opts_chunk$set(echo = TRUE)
 14. Which country has life expentacy over 76 (variable named life) in year 1980? 
 
 
-15. Can you rename the column life to "life_expectancy"? 
+15. Can you rename the column "life" to "life_expectancy"? 
 
 
 16. In year 1990, which countries scored a 10 (most democratic) in their regime scores? 
