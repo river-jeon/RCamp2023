@@ -182,7 +182,6 @@ That’s the basic interface for executing R code in RStudio. Think you have it?
 Now that you know how to use R, let’s use it to make a virtual die together. The : operator gives you a nice way to create a group of numbers from one to six. The : operator returns its results as a vector, a one-dimensional set of numbers:
 ```{r}
 1:6
-start : end 
 ```
 
 Running 1:6 generated a vector of numbers for you to see, but it did not save that vector anywhere in your computer's memory. What you are looking at is basically the footprints of six numbers that existed briefly and then melted back into your computer’s RAM. If you want to use those numbers again, you’ll have to ask your computer to save them somewhere. You can do that by creating an R object.
@@ -620,6 +619,10 @@ However, not every list needs to be complicated. You can store a playing card in
 
 1. Use a list to store a single playing card, like the ace of hearts, which has a point value of one. The list should save the face of the card, the suit, and the point value in separate elements.
 
+```{r}
+card <- list("ace", "hearts", 1)
+card
+```
 
 You can also use a list to store a whole deck of playing cards. Since you can save a single playing card as a list, you can save a deck of playing cards as a list of 52 sublists (one for each card). But let’s not bother—there’s a much cleaner way to do the same thing. You can use a special class of list, known as a **data frame**.
 
@@ -627,6 +630,7 @@ You can also use a list to store a whole deck of playing cards. Since you can sa
 ## 4.5 Factors 
 
 Factors are how R represents categorical data as levels. It can store both character and integer types of data. These factors are created with the help of factor() functions, by taking a vector as input. We will talk more about factors on Day 4.
+
 
 
 ## 4.6 Data Frames 
@@ -637,10 +641,11 @@ Data frames group vectors together into a two-dimensional table. Each vector bec
 
 Creating a data frame by hand takes a lot of typing, but you can do it (if you like) with the data.frame function. Give data.frame any number of vectors, each separated with a comma. Each vector should be set equal to a name that describes the vector. data.frame will turn each vector into a column of the new data frame:
 ```{r}
-df <- data.frame(face = c("ace", "two", "six"),  
-                 suit = c("clubs", "clubs", "clubs"), 
-                 value = c(1, 2, 3))
+df <- data.frame(HappyFace = c("ace", "two", "six"),  
+                 Suit = c("clubs", "clubs", "clubs"), 
+                 Value = c(1, 2, 3))
 df
+# View(df)
 ```
 
 You’ll need to make sure that each vector is the same length (or can be made so with R’s recycling rules) as data frames cannot combine columns of different lengths.
@@ -694,8 +699,13 @@ score = c(12.5, 9, 16.5, 12, 9, 20, 14.5, 13.5, 8, 19)
 attempts = c(1, 3, 2, 3, 2, 3, 1, 1, 2, 1)
 qualify = c('yes', 'no', 'yes', 'no', 'no', 'yes', 'yes', 'no', 'no', 'yes')
 
+df <- data.frame(cbind(name,score,attempts,qualify))
+df <- data.frame(name,score,attempts,qualify)
+
+View(df)
 ```
 3. Get the structure of df. 
+
 4. Open df in the data viewer in R. 
 
 
