@@ -45,7 +45,6 @@ By default, RStudio will save your current “workspace” when you quit. While 
 
 
 
-
 ## 1.1 Code readability 
 
 There are two very good reasons to try to write your code in a clear, understandable way:
@@ -54,6 +53,8 @@ There are two very good reasons to try to write your code in a clear, understand
 * You might need to use your code, a few weeks/months/years after you’ve written it.
 
 It’s possible to write R code that “works” perfectly, and produces all the results and output you want, but proves very difficult to make changes to when you have to come back to it (because a reviewer asked for one additional analysis, etc. which happens very often.) 
+
+
 
 ### 1.1.1 Formatting Tips
 
@@ -65,8 +66,8 @@ You can improve the readability of your code a lot by following a few simple rul
 
 These rules can mean the difference between this:
 
-```{r eval=F}
-lm1=lm(y~grp+grpTime,mydf,subset=sext1=="m")
+```{r eval=FALSE}
+lm1=lm(y~grp+grpTime,mydf,subset=sext1== "m")
 ```
 
 and this: 
@@ -80,7 +81,8 @@ R will treat both pieces of code exactly the same, but for any humans reading, t
 
 ### 1.1.2 Keep a Consistent Style 
 
-Try to follow a consistent style for naming things, e.g. using ** snake_case ** for all your variable names in your R code, and ** TitleCase ** for the columns in your data. Either style is probably better than lowercase with no spacing allmashedtogether. It doesn’t particularly matter what that style is, as long as you’re consistent.
+Try to follow a consistent style for naming things, e.g. using ** snake_case ** for all your variable names in your R code, and ** TitleCase ** for the columns in your data. Either style is probably better than lowercase with no spacing allmashedtogether. It doesn’t particularly matter what that style is, as long as you’re consistent. 
+
 
 ### 1.1.3 Write LOTS of Comments 
 
@@ -101,6 +103,7 @@ anxiety_mean = mean(data$AnxietyTotal)
 You can also put comments that remind you to fix certain errors. 
 ```{r eval=F}
 ###### FIX HERE: This fails to converge #######
+
 ```
 
 ### 1.1.4 Google's R Style Guide 
@@ -123,10 +126,11 @@ getwd()
 ### 1.2.2 Change the working directory 
 
 You can place data files straight into the folder that is your working directory, or you can move your working directory to where your data files are. You can move your working directory to any folder on your computer with the function setwd(). Just give setwd the file path to your new working directory. This may be from the root directory (starting with / on a Mac), it may include a double-dot (..) to move locally up a folder from the current directory, and it may include a path from the current directory. You can set the working directory to a folder dedicated to whichever project you are currently working on. That way you can keep all of my data, scripts, graphs, and reports in the same place. For example:
-```{r}
+```{r eval=F}
 setwd("/Users/ysui/Desktop/R_Camp/Day2")
 ```
 If the file path does not begin with your root directory, R will assume that it begins at your current working directory.
+
 
 ### 1.2.3 List files in the working directory 
 You can see what files are in your working directory with list.files(). If you see the file that you would like to open in your working directory, then you are ready to proceed. How you open files in your working directory will depend on which type of file you would like to open.
@@ -140,7 +144,7 @@ To create a directory in R, use the dir.create(path) method. The dir.create() me
 # This creates a new directory inside the current directory at path = /Users/ysui/Desktop/R_Camp/Day2
 dir.create("./pset2")
 # This sets the new working directory to pset2 created above.
-setwd("/Users/ysui/Desktop/R_Camp/Day2/pset2")
+setwd("/Users/ysui/Desktop/RCamp2022/Day2/Lecture")
 ```
 
 
@@ -149,6 +153,9 @@ setwd("/Users/ysui/Desktop/R_Camp/Day2/pset2")
 1. Get your current working directory. 
 2. Create a new directory and name it ** R_Camp ** . 
 3. Set your working directory to ** ~./R_Camp ** .
+
+
+
 
 
 # 2. Loading and Saving Data
@@ -165,6 +172,7 @@ help(package = "datasets")
 To use a data set, just type its name. Each data set is already presaved as an R object. For example:
 ```{r output.lines = 10}
 iris
+mtcars
 ```
 
 You can use the summary() function to summarize the dataset. The function tells you the minimum, maximum and quartiles for each column. If there are NAs in your dataframe, it also tells you how many NAs there are in each column. 
@@ -215,6 +223,7 @@ If worse comes to worst, you can keep an eye on the environment pane in RStudio 
 
 Both readRDS and load take a file path as their first argument, just like R’s other read and write functions. If your file is in your working directory, the file path will be the file name.
 
+
 ## 2.4 Saving Data to Files 
 
 ### 2.4.1 R Files 
@@ -264,6 +273,11 @@ The row.names argument prevents R from saving the data frame’s row names as a 
 2. Create a new directory named data.
 3. Save the dataframe as "newdata.csv" into the new directory that you just created. 
 
+```{r}
+
+```
+
+
 
 # 3. R Notations 
 
@@ -273,9 +287,11 @@ In Day 1's lecture, we covered how to create a vector, a list, and most importan
 R has a notation system that lets you extract values from R objects. To extract a value or set of values from a data frame, write the data frame’s name followed by a pair of hard brackets:
 ```{r eval=F}
 school_loc[ , ]
+# typeof(school_loc)
+# class(school_loc)
 ```
 
-Between the brackets will go two indexes separated by a comma. The indexes tell R which values to return. R will use the first index to subset the rows of the data frame and the second index to subset the columns.
+Between the brackets will go two indices separated by a comma. The indexes tell R which values to return. R will use the first index to subset the rows of the data frame and the second index to subset the columns.
 
 You have a choice when it comes to writing indexes. There are six different ways to write an index for R, and each does something slightly different. They are all very simple and quite handy, so let’s take a look at each of them. You can create indexes with:
 * Positive integers
@@ -294,6 +310,7 @@ R treats positive integers just like the ij notation used in linear algebra: sch
 
 ```{r}
 head(school_loc)
+tail(school_loc)
 # View(school_loc)
 school_loc[1,1]
 ```
@@ -307,6 +324,7 @@ school_loc[1, c(1,2,3)]
 R will return the values of school_loc that are in both the first row and the first, second, and third columns. Note that R won’t actually remove these values from the dataframe. R will give you a new set of values which are copies of the original values. You can then save this new set to an R object with R’s assignment operator:
 ```{r}
 newdf <- school_loc[1, c(1,2,3)]
+newdf = school_loc[1, c(1,2,3)]
 newdf
 ```
 
@@ -319,6 +337,7 @@ R’s notation system is not limited to data frames. You can use the same syntax
 ```{r}
 vec <- c(2,4,6,8,10)
 vec[1:3]
+1:3
 ```
 
 If you select two or more columns from a data frame, R will return a new data frame:
@@ -355,7 +374,7 @@ school_loc[c(-1, 1), 1]
 
 However, you can use both negative and positive integers to subset an object if you use them in different indexes (e.g., if you use one in the rows index and one in the columns index, like school_loc[-1, 1]).
 ```{r eval=F}
-school_loc[-1, 1]
+# school_loc[-1, 1]
 ```
 
 
@@ -388,6 +407,8 @@ It may help to imagine R reading through the data frame and asking, "Should I re
 dim(school_loc) # [1] 7012   26
 # You can use the multiplication symbol here as a shortcut to the FALSEs. 
 school_loc[1, c(TRUE, TRUE, FALSE * 24)] 
+school_loc[1, c(TRUE, TRUE, FALSE, TRUE, FALSE * 22)] 
+school_loc[1,]
 ```
 This system may seem odd—who wants to type so many TRUEs and FALSEs? 
 But it will become very powerful in the next section on modifying values.
@@ -396,6 +417,7 @@ It is important to note here that TRUE is equivalent to 1 and FALSE is equivalen
 ```{r}
 as.integer(TRUE)
 as.integer(FALSE)
+
 as.logical(1)
 as.logical(100)
 as.logical(-1)
@@ -422,6 +444,11 @@ Now that you know the basics of R’s notation system, let’s put it to use.
 2. Extract the 100th row from school_loc
 3. Extract the 200th to 300th rows from school_loc, but only from the following columns: NAME, STREET, CITY, STATE, ZIP. 
 
+```{r}
+school_loc[1:10,]
+school_loc[c(1:10),]
+```
+
 
 
 ## 3.2 Dollar Signs and Double Brackets 
@@ -439,6 +466,7 @@ R will return all of the values in the column as a vector. This \$ notation is i
 ```{r}
 mean(school_loc$X)
 median(school_loc$Y)
+max(school_loc$Y)
 ```
 
 You can use the same \$ notation with the elements of a list, if they have names. This notation has an advantage with lists, too. If you subset a list in the usual way, R will return a new list that has the elements you requested. This is true even if you only request a single element. For example: 
@@ -448,7 +476,9 @@ l <- list(numbers = c(1, 2), logical = TRUE, strings = c("a", "b", "c"))
 l
 
 # And then subset it:
-l[1]
+typeof(l[1])
+class(l[1])
+l$numbers
 ```
 
 The result is a smaller list with one element. That element is the vector c(1, 2). This can be annoying because many R functions do not work with lists. For example, sum(l[1]) will return an error. It would be horrible if once you stored a vector in a list, you could only ever get it back as a list:
@@ -461,6 +491,7 @@ sum(l[1])
 When you use the \$ notation, R will return the selected values as they are, with no list structure around them:
 ```{r}
 l$numbers
+l[1]
 l$strings
 ```
 You can then immediately feed the results to a function:
@@ -470,15 +501,18 @@ sum(l$numbers)
 
 If the elements in your list do not have names (or you do not wish to use the names), you can use two brackets, instead of one, to subset the list. This notation will do the same thing as the \$ notation:
 ```{r}
-l[[1]]
+sum(l[[1]])
+l[1]
 ```
 
 In other words, if you subset a list with single-bracket notation, R will return a smaller list. If you subset a list with double-bracket notation, R will return just the values that were inside an element of the list. You can combine this feature with any of R’s indexing methods:
 ```{r}
 l["numbers"]
 typeof(l["numbers"])
+
 l[["numbers"]]
 typeof(l[["numbers"]])
+sum(l[["numbers"]])
 ```
 
 This difference is subtle but important. In the R community, there is a popular, and helpful, way to think about it. Imagine that each list is a train and each element is a train car. When you use single brackets, R selects individual train cars and returns them as a new train. Each car keeps its contents, but those contents are still inside a train car (i.e., a list). When you use double brackets, R actually unloads the car and gives you back the contents.
@@ -493,6 +527,8 @@ You can use R’s notation system to modify values within an R object. First, de
 ```{r}
 vec <- c(1:10)
 vec
+vec <- c(10:20)
+vec
 ```
 
 Here’s how you can select the first value of vec: 
@@ -504,6 +540,8 @@ And here is how you can modify it:
 ```{r}
 vec[1] <- 999
 vec
+vec[-1] <- 0
+vec
 ```
 
 You can replace multiple values at once as long as the number of new values equals the number of selected values:
@@ -513,10 +551,13 @@ vec
 
 vec[4:6] <- vec[4:6] + 1
 vec
+
 ```
 
 You can also create values that do not yet exist in your object. R will expand the object to accommodate the new values:
 ```{r}
+vec <- c(1:10)
+length(vec)
 vec[12] <- 0
 vec
 ```
@@ -526,14 +567,15 @@ Notice the NA in the vector. Our original vector has 10 elements, but here we ad
 
 Now you can add new variables to your data set:
 ```{r}
-school_loc$newcol <- 1:7012
-# View(school_loc)
+school_loc$indices <- 1:7012
+View(school_loc)
 ```
 
 You can also remove columns from a data frame (and elements from a list) by assigning them the symbol NULL:
 ```{r}
 school_loc$newcol <- NULL
 # View(school_loc)
+colnames(school_loc)
 ```
 
 You can single out just the values by subsetting the columns dimension. You can also assign a new set of values to these old values. The set of new values will have to be the same size as the set of values that you are replacing.
@@ -542,14 +584,17 @@ You can single out just the values by subsetting the columns dimension. You can 
 school_loc$newcol <- 1:7012
 
 school_loc$newcol[c(1,3,5,7,9)] <- c(111, 333, 555, 777, 999)
+
 # If you would like to set them to the same value, simply do: 
-school_loc$newcol[c(2,4,6,8,10)] <- 0
+school_loc$newcol[c(2,4,6,8,10)] <- 1000
 school_loc[1:10, "newcol"]
+# View(school_loc)
+
 ```
 
 Notice that the values change in place. You do not end up with a new copy of the school_loc dataframe. The new values will appear inside the school_loc dataframe. 
 
-The same technique will work whether you store your data in a vector, matrix, array, list, or data frame. Just describe the values that you want to change with R’s notation system, then assign over those values with R’s assignment operator.
+The same technique will work whether you store your data in a vector, matrix, list, or data frame. Just describe the values that you want to change with R’s notation system, then assign over those values with R’s assignment operator. 
 
 
 ## 4.2 Logical Subsetting 
@@ -573,17 +618,23 @@ A logical test is a comparison like “is one less than two?”, 1 < 2, or “is
 Each operator returns a TRUE or a FALSE. If you use an operator to compare vectors, R will do element-wise comparisons—just like it does with the arithmetic operators:
 
 ```{r}
-1 > 2
+1 < 2
 1 > c(0, 1, 2)
+
 c(1, 2, 3) == c(3, 2, 1)
+
 ```
 
 %in% is the only operator that does not do normal element-wise execution. %in% tests whether the value(s) on the left side are in the vector on the right side. If you provide a vector on the left side, %in% will not pair up the values on the left with the values on the right and then do element-wise tests. Instead, %in% will independently test whether each value on the left is somewhere in the vector on the right:
 ```{r}
 1 %in% c(3, 4, 5)
+
 c(1, 2) %in% c(3, 4, 5)
+
 c(1, 2, 3) %in% c(3, 4, 5)
+
 c(1, 2, 3, 4) %in% c(3, 4, 5)
+
 ```
 
 Notice that you test for equality with a double equals sign, ==, and not a single equals sign, =, which is another way to write the assignment operator <-. It is easy to forget and use a = b to test if a equals b. Unfortunately, you’ll be in for a nasty surprise. R won’t return a TRUE or FALSE, because it won’t have to: a will equal b, because you just ran the equivalent of a <- b where you manually set the value of a to be b. 
@@ -598,6 +649,7 @@ school_loc$X
 # Use the < operator to check whether each value is less than -100
 school_loc$X < -100
 # Use the sum() function to check how many TRUEs there are 
+# TRUE = 1 / FALSE = 0
 sum(school_loc$X < -100)
 
 # What does this do? 
@@ -611,7 +663,7 @@ To summarize, you can use a logical test to select values within an object.
 
 Logical subsetting is a powerful technique because it lets you quickly identify, extract, and modify individual values in your data set. When you work with logical subsetting, you do not need to know where in your data set a value exists. You only need to know how to describe the value with a logical test.
 
-Logical subsetting is one of the things R does best. In fact, logical subsetting is a key component of vectorized programming, a coding style that lets you write fast and efficient R code.
+Logical subsetting is one of the things R does best. In fact, logical subsetting is a key component of vectorized programming, a coding style that lets you write fast and efficient R code. 
 
 
 ## \textcolor{red}{In-class exercises 2.4:}
@@ -629,6 +681,16 @@ Let's practice with the dataset TFR.
 TFR$ChildBearing[TFR$ChildBearing > 25]
 ```
 9. Set all values in the column ChildBearing that are less than 25 to 0.
+
+```{r}
+TFR <- read.csv("dataset.csv")
+sum(TFR$TFR > 8)
+nrow(TFR[TFR$TFR > 8,])
+typeof(TFR[TFR$TFR > 8,])
+TFR[TFR$TFR >8]
+typeof(TFR$TFR > 8)
+nrow(TFR[TFR$TFR > 8,])
+```
 
 
 
@@ -649,6 +711,7 @@ c <- c(1, 2, 4)
 a == b
 b == c
 a == b & b == c
+# (TRUE TRUE TRUE) & (TRUE  TRUE FALSE)
 ```
 
 
@@ -671,12 +734,30 @@ z <- c("Monday", "Tuesday", "Friday")
 
 6. Use logical operators to output only those rows of data in TFR where column Year is between 1950 and 1955 inclusively.
 
+
 7. Use logical operators to output only those rows of  data  where column TFR is equal to 7.45 and column Year is greater than 1960.
 
 8. Use logical operators to output only the even rows of the dataframe. 
 
-9. Use logical operators and change every fourth element in column  LifeExpB  to 0.
+9. Use logical operators and change every 4th element in column  LifeExpB  to 0.
 
+```{r}
+data <- TFR
+# 6
+data[data$Year >= 1950 & data$Year <= 1955,]
+
+# 7
+data[data$TFR == 7.45 & data$Year > 1960,]
+
+# 8
+data[c(F,T),]
+
+# 9
+data$LifeExpB[c(F,F,F,T)] <- 0
+
+# %% 
+
+```
 
 
 
@@ -694,7 +775,7 @@ R will return a second piece of missing information. It would not be correct to 
 
 What if you tested whether a piece of missing information is equal to 1?
 ```{r}
-NA == 1
+NA == 3.14
 ```
 
 Again, your answer would be something like “I do not know if this is equal to one,” that is, NA. Generally, NAs will propagate whenever you use them in an R operation or function. This can save you from making errors based on missing data.
@@ -735,14 +816,14 @@ But don’t worry too hard; R supplies a special function that can test whether 
 ```{r}
 is.na(NA)
 vec3 <- c(1, 2, 3, NA)
-is.na(vec)
+is.na(vec3)
 ```
 
 
 ```{r}
 # What does this do?
 school_loc$ZIP[school_loc$X < -100] <- NA
-# View(school_loc)
+View(school_loc)
 ```
 
 
@@ -750,7 +831,9 @@ school_loc$ZIP[school_loc$X < -100] <- NA
 
 You can also remove all observations containing NA's in any column by using the na.omit() function. For example,
 ```{r eval=FALSE}
+summary(school_loc)
 new_df <- na.omit(school_loc)
+summary(new_df)
 ```
 
 
@@ -760,6 +843,8 @@ new_df <- na.omit(school_loc)
 1. What is the length of X?
 ```{r}
 X <- c (123,0,NA,8,NA,200)
+na.omit(X)
+X
 ```
 
 2. Can you find all occurrences of NA in X? How can you find the total number of NAs in X? 
@@ -774,6 +859,10 @@ X <- c (123,0,NA,8,NA,200)
 
 7. Create a new dataframe TFR3 where you remove all rows with NA values in the GDPpc column. 
 
+```{r}
+TFR3 <- TFR[!is.na(TFR$GDPpc), ]
+View(TFR3)
+```
 
 
 
