@@ -34,9 +34,8 @@ knit_hooks$set(output = function(x, options) {
 
 
 # Day 3 Outline:
-1. Functions & Arguments 
-2. Control Statements (if, if-else, for, while)
-3. Sampling using loops
+1. Functions and Arguments 
+2. Control Statements (if, if-else, for, while) and Random Sampling 
 
 
 # 1. Functions
@@ -52,13 +51,14 @@ factorial(3)
 The data that you pass into the function is called the function’s argument. The argument can be raw data, an R object, or even the results of another R function. In this last case, R will work **from the innermost function to the outermost**.
 ```{r}
 die <- 1:6
+die
 mean(1:6)
 mean(die)
 round(mean(die))
 ceiling(mean(die))
 floor(mean(die))
-ceiling(3.01)
-floor(3.99)
+ceiling(4.000001)
+floor(3.99999999)
 ```
 
 
@@ -70,7 +70,7 @@ Base R comes with the sample() function, which takes two arguments:
 1. A vector named x 
 2. A number named size
 
-sample() will return the elements sampled from the vector. The return value if **not** a list, which means if you need to do list operations, you need to first convert it to a list. 
+sample() will return the elements sampled from the vector. The return value is **not** a list, which means if you need to do list operations, you need to first convert it to a list. 
 ```{r}
 sample(x = 1:4, size = 2)
 die <- 1:6
@@ -91,6 +91,7 @@ However, using names is **optional**. You might notice that R users do not often
 
 ```{r}
 sample(die, size = 3)
+sample(x = die, size = 3)
 # or equivalently
 sample(die, 3)
 ```
@@ -108,6 +109,7 @@ If you are not sure which names to use with a function, you can look up the func
 
 ```{r}
 args(round)
+round(3.14, digits = 1)
 args(ceiling)
 args(floor)
 ```
@@ -131,13 +133,20 @@ If you do not write out the names of your arguments, R will match your values to
 For example, in the following code, the first value, die, will be matched to the first argument of sample, which is named **x**. The next value, 1, will be matched to the next argument, **size**:
 ```{r}
 sample(die, 1)
+args(sample)
+sample(die, 2)
 ```
 
 As you provide more arguments, it becomes more likely that your order and R’s order may **not align**. As a result, values may get passed to the wrong argument. Argument names prevent this. R will always match a value to its argument name, no matter where it appears in the order of arguments.
 
 For example, if we reverse the order of arguments in the function call above, it is still equivalent.
 ```{r}
-sample(size = 1, x = die) # notice the order is reversed here
+sample(size = 3, x = die) # notice the order is reversed here
+sample(1:3, 2:6)
+sample(x = 3, size = 2)
+args(sample)
+?sample
+sample(5)
 ```
 
 
@@ -156,7 +165,7 @@ sample(x = die, size = 3)
 
 To do sampling with replacement, you can add the argument **replace = TRUE**:
 ```{r}
-sample(x = die, size = 3, replace = TRUE)
+sample(x = die, size = 6, replace = TRUE)
 sample(x = c(0,1), size = 10, replace = TRUE) # 10 Bernoulli trials 
 ```
 
@@ -164,7 +173,8 @@ The argument **replace = TRUE** causes sample() to sample **with replacement**. 
 
 Sampling with replacement is an easy way to create independent random samples. Each value in your sample will be a sample of size one that is independent of the other values. For example, this would be how we simulate a pair of fair dice: 
 ```{r}
-sample(die, size = 2, replace = TRUE)
+die
+sample(x = die, size = 2, replace = TRUE)
 ```
 
 
@@ -194,6 +204,11 @@ However, it would be convenient to have an object that can **re-roll** the dice 
 ## \textcolor{red}{In-class exercises 3.1:}
 
 1. Sample with replacement from 1 to 1000 inclusive of size 20.
+```{r}
+set.seed(12345)
+sample(1:100, 5)
+```
+
 2. Sample without replacement from 1 to 1000 inclusive of size 20.
 3. What does the following code do?
 ```{r}
@@ -237,6 +252,7 @@ roll()
 
 Functions might sound fancy when first hearing about it. They are just another type of R object. Instead of containing data, like vectors, matrices, or dataframes, functions contain code. This code is stored in a special format that makes it easy to reuse the code in new situations throughout your program. You can write your own functions by recreating the following format.
 
+
 ### 1.2.1 The Function Constructor
 
 Every function in R has three basic parts: 
@@ -260,9 +276,12 @@ my_function <- function() {
 For example, you can turn your dice code into a function by running:
 ```{r}
 roll <- function() {
-  die <- 1:6 
-  dice <- sample(die, size = 2, replace = TRUE)
-  return(sum(dice)) # return value
+  die <- 1:6
+  dice <- sample(die, 
+                 size = 2, 
+                 replace = TRUE)
+  s <- sum(dice)
+  return(s) # return value
 }
 ```
 
@@ -305,7 +324,7 @@ And here’s some code that would not:
 dice <- sample(die, size = 2, replace = TRUE)
 two <- 1 + 1
 a <- sqrt(2)
-df[1, ] <- 0
+# df[1, ] <- 0
 ```
 
 Do you notice the pattern? These lines of code do not return a value to the command line; they save a value to an object. Generally, if the last line of code in your function definition is an assignment statement, it will not return anything. 
@@ -342,6 +361,7 @@ Now roll2 will work as long as you provide rcamp when you call the function roll
 Remember, we’re rolling pairs of dice that have different number of sides:
 ```{r}
 roll2(rcamp = 1:4) # 4-sided
+
 roll2(rcamp = 1:6) # 6-sided
 roll2(rcamp = 1:20) # 20-sided
 roll2(1:20) # without the argument name, it works the same
@@ -387,14 +407,14 @@ roll4 <- function(bones = 1:6) {
   l <- list(sum(dice), dice)
   return (l)
 }
-roll4() 
+roll4()
 # The first item returned is sum(dice).
 # The second item returned is the list dice that stores 2 values.
 ```
 
 
 
-You can give your functions **as many arguments as you like**. Just list their names, separated by commas, in the parentheses that follow function. When the function is run, R will replace each argument name in the function body with the value that you provide for the argument. 
+You can give your functions **as many arguments as you like**. Just list their names, separated by commas, in the parentheses that follow function(). When the function is run, R will replace each argument name in the function body with the value that you provide for the argument. 
 
 * If you do not provide a value, R will replace the argument name with the argument’s default value if you defined one. 
 * If you forget to provide a value for an argument that does not have any default value defined, R will stop execution and print an Error Message asking for it!
@@ -409,8 +429,6 @@ To summarize, **function()** helps you construct your own R functions.
 Once you have created your function, R will treat it like every other function in R, such as sum(), mean(), round(), etc. Think about how useful this is! 
 
 In the previous exericise, I asked you to sample the column TFR five times and calculate their averages. What if I asked you to do it 1000 times? Without functions, repeating the same chunk of code could be terrifying. As you learn to program in R, you will be able to create new, customized, reproducible tools for yourself whenever you like.
-
-
 
 
 ## \textcolor{red}{In-class exercises 3.2:}
@@ -439,6 +457,8 @@ In order to control the flow of execution of expressions in R, we make use of th
 
 Whenever possible, it is more efficient to use **built-in functions** in R rather than control structures. This facilitates the flow of execution to be controlled inside a function. Control structures define the flow of the program. The decision is then made after the variable is assessed. 
 
+
+
 ## 2.1 $if$ Condition in R 
 
 The **if** and **if-else** conditions in R enforce **conditional execution** of the code. They are an important part of R's decision-making capability. It allows us to make a decision based on the result of a condition. The **if** statement contains a condition that evaluates to a logical output (TRUE = 1 / FALSE = 0). 
@@ -450,8 +470,8 @@ The **if** and **if-else** conditions in R enforce **conditional execution** of 
 ```{r eval=FALSE}
 # Syntax: 
 # This code block is not executable. Just for illustration.
-if (test_expression) {
-  statement
+if (test_expression) { 
+  statement 
 }
 ```
 
@@ -514,25 +534,29 @@ We use the **else** statement with the **if** statement to enact a choice betwee
 
 For example:
 ```{r}
-a <- 10
+a <- 100
 b <- 88
 if (a > b) {
   print("a is greater than b")
-} else{
-  print("b is greater than a")
-}
+} 
+# 
+# else{
+#   print("b is greater than a")
+# }
 ```
 
 We can use the **else if** statement to select between multiple options. For example:
 ```{r}
-a <- 5
+a <- 10
 b <- 5
 if (a < b) {
   print("a is smaller than b")
-} else if(a==b) {
+} else if (a == b) {
   print("a is equal to b")
-} else {
+} else if (a > b) {
   print("a is greater than b")
+} else {
+  print("haha")
 }
 ```
 
@@ -555,9 +579,9 @@ ifelse(a < 7, "a is less than 7", "a is greater than 7")
 ```
 
 
-We can use the **ifelse()** function to modify values in our dataframe. For example, we can create a new column in the dataframe called PopOver100 where its value if TRUE if the population is greater than 100 and FALSE otherwise. 
+We can use the **ifelse()** function to modify values in our dataframe. For example, we can create a new column in the dataframe called PopOver100 where its value is TRUE if the population is greater than 100 and FALSE otherwise. 
 ```{r eval = FALSE}
-df$PopOver100 <- ifelse(df$Population > 110, TRUE, FALSE)
+df$PopOver100 <- ifelse(df$Population > 100, TRUE, FALSE)
 ```
 
 You might remember Q17 and Q18 from Day2's problem set. You can solve them using this **ifelse()** function. 
@@ -592,9 +616,12 @@ for (variable in sequence) {
 
 Here is an example: 
 ```{r}
-vec <- c(1:10)
+vec <- c(1:11)
+vec
+vec2 <- c(10:20)
+vec2
 for (i in vec) {
-  print(vec[i])
+  print(vec2[i])
 }
 ```
 
@@ -603,7 +630,9 @@ With the **for** loops, we can now iterate through the entire dataframe.
 
 For example, if you want to list all the years: 
 ```{r}
-for (i in 1:dim(df)[1]){
+n1 <- dim(df)[1]
+n2 <- dim(df)[2]
+for (i in 1:n1){
   print(df$Year[i])
 }
 ```
@@ -619,6 +648,7 @@ for (i in 1:dim(df)[1]) {
 # For good practice, you can assign dim(df)[1] to a new variable. 
 # For example: 
 L <- dim(df)[1]
+
 ```
 
 Let's create a new column called ratio, and initialize it with NAs.  
@@ -631,7 +661,7 @@ Now we want to recode the ratio variable, where we divide Employed over the sum 
 ```{r}
 # l <- dim(df)[1]
 for (i in 1:L) {
-  df$ratio[i] <- df$Employed[i] / (df$Unemployed[i] + df$Employed[i])
+  df$ratio[i] <- df$Employed[i] / ( df$Unemployed[i] + df$Employed[i] )
 }
 ```
 
@@ -676,8 +706,8 @@ You should **NEVER** set your test_expression to the logical TRUE directly when 
 
 Here is another example: 
 ```{r}
-i <- 1 # i is initially initialized to 1
-while (i < 6) {
+i <- 1 # i is initialized to 1
+while (i <= 6) {
   print(i)
   i = i+1 # increment i
 }
