@@ -1,0 +1,173 @@
+---
+title: "Day 1 Exercises"
+author: "Cecilia Sui"
+date: "01/10/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Day 1 Outline:
+1. Why should we learn R?
+2. Installation
+3. The Basics 
+4. R Objects 
+
+We have covered some basic concepts in R. Let's do some exercises to familiarize ourselves with the R syntax and objects. 
+
+# Basic Objects 
+
+## 1. Create a new vector named numbers which stores the numbers from 0 through 100.
+```{r}
+numbers <- c(0:100)
+numbers
+```
+
+## 2. Print the 20th element in numbers.
+```{r}
+numbers[20]
+```
+
+## 3. Find the length of numbers.
+```{r}
+length(numbers)
+```
+
+## 4. Find the type of numbers. 
+```{r}
+typeof(numbers)
+```
+
+## 5. Check if numbers is a vector  
+```{r}
+is.vector(numbers)
+```
+
+## 6. Create a list l containing the vector numbers, and the letters A, B, C. 
+```{r}
+l <- list(numbers, "A", "B", "C")
+l
+```
+## 7. Access the 10th element of the first element in the list l. Print out the value. (It should be 9.)
+```{r}
+l[[1]][10]
+```
+
+
+# Matrix Operation 
+## 1. Create three vectors x,y,x with integers and each vector has 3 elements. You can choose whatever integers you want. Combine the three vectors to become a 3×3 matrix A where each column represents a vector. 
+```{r}
+x = c(5,7,2)
+y = c(2,3,4)
+z = c(3,4,5)
+A = matrix(c(x,y,z) ,3,3)
+A
+```
+
+## 2. Check whether A is a matrix in R. 
+```{r}
+is.matrix(A)
+```
+
+## 3. Create a vector with 12 integers. Convert the vector to a 4x3 matrix B using matrix().
+```{r}
+v = c(1:12)
+B = matrix(v,4,3)
+B
+```
+
+## 4. Obtain the transpose matrix of B and name it tB.
+```{r}
+tB = t(B)
+tB
+```
+
+## 5. Get the dimension of tB.
+```{r}
+dim(tB)
+```
+
+## 6. Multiply A by tB.
+```{r}
+A %*% tB
+```
+
+## 7. Find the inverse of A.
+```{r}
+solve(A)
+```
+
+## 8. Combine A and B vertically. 
+```{r}
+rbind(A,B)
+```
+## 9. Combine A and tB horizontally. 
+```{r}
+cbind(A, tB)
+```
+
+
+# Dataframe 
+## 1. Create a dataframe that stores all the first names of the students in our R bootcamp, the major fields of study, and their home country 
+```{r}
+df <- data.frame(
+  name = c("A", "B", "C"),
+  field = c("American", "IR", "CP"),
+  hometown = c("Mexico", "US", "China")
+)
+```
+
+## 2. Get the structure of the dataframe.
+```{r}
+str(df)
+```
+
+## 3. Open df in the data viewer in R.
+```{r}
+# View(df)
+```
+
+## 4. What is the dimension of the dataframe? How many observations and variables? 
+```{r}
+dim(df)
+```
+
+
+
+# Matrix Operation with Real Data
+
+Here we will use the graduate program admission data from UCLA to connect to the linear algebra you covered towards the end of Math Modeling. 
+```{r}
+# load data
+df <- read.csv("https://stats.idre.ucla.edu/stat/data/binary.csv")
+```
+
+Remember Ted asked you to solve for $$\hat{\beta} = (X^TX)^{-1}X^Ty$$ 
+
+Here we are going to do some regression manually to see what is going on behind the scene when you obtain the coefficients from R. You’ll need to store the dataframe as a matrix. A couple other commands that will come in handy are:
+
+* %*%: matrix multiplication
+* t(): transpose a matrix
+* solve(): when a square matrix is given as the only argument, inverts it 
+* diag(): get the diagonal of a matrix
+
+Let’s start with the coefficients. Remember to add a column of 1’s for the intercept. 
+```{r}
+# sol
+mat <- as.matrix(df)
+X <- mat[ , 2:4]
+X <- cbind(1, X)
+y <- mat[ , 1]
+hat <- solve(t(X)%*%X)
+man_co <- hat %*% (t(X)%*%y)
+```
+
+Now compare your coefficients to what lm() found.
+```{r}
+lm_ols <- lm(formula = admit ~ ., data = df)
+(cbind(man_co, coef(lm_ols)))
+```
+They should be exactly the same (give or take a round-off on the last digit).
+

@@ -71,9 +71,12 @@ Unfortunately, R does not use the terms numerical, categorical, and ordinal for 
 Numerical variables can be coded as variables with numeric or integer classes. The default class to store numbers in R is numeric. An L used with values to tell R to store the data as an integer class.
 ```{r}
 Count <- c(1, 2, 3, 4, 5)
+Count
 class(Count)
+typeof(Count)
 Count.int <- c(1L, 2L, 3L, 4L, 5L)
 class(Count.int)
+typeof(Count.int)
 ```
 
 R has two names for its floating-point vector: "double" and "numeric". 
@@ -87,6 +90,7 @@ For example:
 ```{r}
 Colors <- c("Red", "Green", "Blue")
 class(Colors)
+
 Colors.f <- factor(c("Red", "Green", "Blue"))
 class(Colors.f)
 ```
@@ -111,6 +115,9 @@ Sometimes, the order of the factors does not matter, other times you might want 
 
 ```{r}
 TFR.f <- factor(c("low", "high", "medium", "high", "low", "medium", "high"))
+typeof(TFR.f)
+class(TFR.f)
+TFR.f
 levels(TFR.f)
 
 TFR.f1 <- factor(TFR.f, levels=c("low", "medium", "high"))
@@ -128,12 +135,9 @@ min(TFR.f1)
 max(TFR.f1)
 ```
 
-In R’s memory, these factors are represented by numbers (1, 2, 3). They are better than using simple integer labels because factors are self describing: "low", "medium", and "high"" is more descriptive than 1, 2, 3. Which is low? You wouldn’t be able to tell with just integer data. Factors have this information built in. It is particularly helpful when there are many levels. 
+In R’s memory, these factors are represented by numbers (1, 2, 3). They are better than using simple integer labels because factors are self describing: "low", "medium", and "high" is more descriptive than 1, 2, 3. Which is low? You wouldn’t be able to tell with just integer data. Factors have this information built in. It is particularly helpful when there are many levels. 
 
 We can code ordinal data as either numeric or factor variables, depending on how we will be summarizing, plotting, and analyzing it.
-
-
-
 
 
 When we load a dataset into R using the read.csv function, R does not always store them with the desired classes. For example, in our school location dataset, R stores the column "STATE" as characters. It would make more sense to treat them as factors. We can convert them to factors like this: 
@@ -146,8 +150,10 @@ str(school_loc)
 school_loc$STATE = factor(school_loc$STATE)
 # Let's check again. You can see that STATE is now stored as factors in R. 
 str(school_loc)
-
-summary(school_loc)
+# View(school_loc)
+levels(school_loc$STATE)
+school_loc$STATE
+# summary(school_loc)
 ```
 
 Notice the **summary()** function handles factors differently to numbers (and strings), the occurrence counts for each value is often more useful information.
@@ -157,8 +163,6 @@ The function **table()** is also useful for viewing the observations.
 table(school_loc$STATE)
 ```
 
-
-
 ## \textcolor{red}{In-class exercises 4.1:}
 
 1. Load the worldTFR dataset.
@@ -166,6 +170,7 @@ table(school_loc$STATE)
 3. Get the summary statistics of the dataframe. 
 4. What data types are each variable stored as? 
 5. Convert variables to factor as appropriate. 
+
 
 
 # 2. Probability distributions in R
@@ -179,9 +184,10 @@ The four normal distribution functions are:
 * qnorm: quantile function of the normal distribution
 * rnorm: random sampling from the normal distribution
 
+
 ## 2.1 dnorm 
 ```{r}
-# ?dnorm
+?dnorm
 dnorm(0:10, mean = 0, sd = 1, log = FALSE)
 ```
 
@@ -197,6 +203,7 @@ iq.sd <- 15
 # This returns the density, NOT the values for IQ
 iq.dist <- dnorm(sample.range, mean = iq.mean, sd = iq.sd) 
 iq.df <- data.frame("IQ" = sample.range, "Density" = iq.dist)
+View(iq.df)
 plot(iq.df)
 ```
 From these data, we can now answer the initial question as well as additional questions. Let's write a function that returns a percentage value when given a density.
@@ -227,8 +234,11 @@ The cumulative density (CDF) function is a monotonically increasing function as 
 To get an intuition of the CDF, let’s create a plot for the IQ data:
 ```{r}
 cdf <- pnorm(sample.range, iq.mean, iq.sd)
+cdf
+?pnorm
 iq.df <- cbind(iq.df, "CDF_LowerTail" = cdf) 
 # Can you explain what this code above is doing?
+View(iq.df)
 
 library(ggplot2)
 ggplot(iq.df, aes(x = IQ, y = CDF_LowerTail)) + geom_point()
@@ -248,6 +258,7 @@ pp(iq.df$CDF_LowerTail[iq.df$IQ == 90])
 # set lower.tail to FALSE to obtain P[X >= x]
 cdf <- pnorm(sample.range, iq.mean, iq.sd, lower.tail = FALSE)
 iq.df <- cbind(iq.df, "CDF_UpperTail" = cdf)
+View(iq.df)
 # Probability for IQ >= 140? same value as before using dnorm!
 pp(iq.df$CDF_UpperTail[iq.df$IQ == 140])
 ```
@@ -265,10 +276,11 @@ Let’s take a look at the quantile function for $P[X<=x]$:
 ```{r}
 # input to qnorm is a vector of probabilities
 prob.range <- seq(0, 1, 0.001) 
+# prob.range
 # ?seq
 
 icdf.df <- data.frame("Probability" = prob.range, "IQ" = qnorm(prob.range, iq.mean, iq.sd))
-# View(icdf.df)
+View(icdf.df)
 ggplot(icdf.df, aes(x = Probability, y = IQ)) + geom_point()
 ```
 
@@ -307,9 +319,10 @@ For example, we could use **rnorm** to simulate random samples from the IQ distr
 # fix random seed for reproducibility
 set.seed(1234)
 
-# ?rnorm
+?rnorm
 obs <- rnorm(n=100, iq.mean, iq.sd) 
 mean(obs)
+obs
 
 
 
@@ -344,11 +357,13 @@ Please explain what the following code does:
 1.
 ```{r}
 pnorm(0)
+?pnorm
 ```
 
 2. 
 ```{r}
 pnorm(1.96, lower.tail=TRUE)
+pnorm(1.96, lower.tail=FALSE)
 ```
 
 3.
@@ -373,7 +388,7 @@ qnorm(.975, 20, 1.65)
 
 7. 
 ```{r}
-rnorm(1:100, 0.05, 0.5)
+mean(rnorm(1:1000, 0.05, 0.5))
 ```
 
 
@@ -388,7 +403,7 @@ names(school_loc)
 ```
 
 * rownames() – It works on matrix or data frame objects and is used to give names to rows.
-```{r output.lines=10}
+```{r output.lines = 10}
 rownames(school_loc)
 ```
 
@@ -398,8 +413,9 @@ colnames(school_loc)
 ```
 
 * dimnames() – Gets row and column names for matrix or data frame objects, that is, it is used to see dimensions of the data frame.
-```{r output.lines=10}
+```{r output.lines=5}
 dimnames(school_loc)[1]
+dim(school_loc)
 ```
 
 ```{r output.lines=10}
@@ -417,6 +433,7 @@ dimnames(school_loc)[2]
 * median( x, na.rm = FALSE) – Shows the median value of the vector.
 * sd(x, na.rm = FALSE) – Shows the standard deviation.
 * var(x, na.rm = FALSE) – Shows the variance.
+
 * mad(x, na.rm = FALSE) – Shows the median absolute deviation.
 * log(dataset) – Shows log value for each element.
 * summary(dataset) – We have seen how it shows a summary of dataset like maximum value, minimum value, mean, etc.
@@ -424,6 +441,7 @@ dimnames(school_loc)[2]
 ```{r}
 x <- sample(1:100000, 2000)
 quantile(x, probs = seq(0, 1, 0.25), na.rm = FALSE, names = TRUE)
+?quantile
 ```
 
 
@@ -438,18 +456,21 @@ df <- longley
 s <- summary(df)
 s
 # You can simply use indices to access each element like this: 
-s[1]
+s[7]
+typeof(s)
 ```
 
 When we go into linear regression in QPM I, accessing elements of list-like objects would become more useful. For example, we can fit a linear model using the lm() function where the independent variable is population and the dependent variable is the number of unemployed. 
 ```{r}
 lm <- lm(Unemployed ~ Population, data = df)
+lm
 ```
 
 Let's check the structure of the object: 
 ```{r output.lines=10}
 str(lm)
 ```
+
 You can use the summary() function again on lm. 
 ```{r output.lines=10}
 summary(lm)
@@ -460,14 +481,14 @@ If you want to access elements from the summary statistics, you can use dollar s
 lm$coefficients
 lm$residuals
 lm$coefficients[1] 
-lm$coefficients[[1]]
+lm$coefficients[[1]] 
 ```
 
 ## \textcolor{red}{In-class exercises 4.3:}
 
-We will continue using the TFR dataset.
+We will continue using the worldTFR dataset.
 
-1. Omit all NA's in the dataframe. 
+1. Load the dataset and omit all NA's in the dataframe. 
 2. Run a linear regression of ChildBearing on TFR.
 3. Get the coefficients. 
 4. What are the column names and row names? 
@@ -477,7 +498,15 @@ We will continue using the TFR dataset.
 8. What is the 25% and 75% quantile of Life Expectancy at Birth (LifeExpB)?
 
 ```{r eval = FALSE}
-TFR <- read.csv("worldTFR.csv")
+# 1. 
+worldTFR <- read.csv("worldTFR.csv")
+TFR <- na.omit(worldTFR)
+
+# 2. 
+ols <- lm(TFR ~ ChildBearing , data = worldTFR)
+
+# 3. 
+ols$coefficients
 
 # 4.
 colnames(TFR)
