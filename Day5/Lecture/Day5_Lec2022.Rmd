@@ -1,0 +1,657 @@
+---
+title: "Day 5 Lecture"
+author: "Cecilia Y. Sui"
+date: "01/14/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE)
+hook_output <- knit_hooks$get("output")
+knit_hooks$set(output = function(x, options) {
+  lines <- options$output.lines
+  if (is.null(lines)) {
+    return(hook_output(x, options))  # pass to default hook
+  }
+  x <- unlist(strsplit(x, "\n"))
+  more <- "..."
+  if (length(lines)==1) {        # first n lines
+    if (length(x) > lines) {
+      # truncate the output, but add ....
+      x <- c(head(x, lines), more)
+    }
+  } else {
+    x <- c(more, x[lines], more)
+  }
+  # paste these lines together
+  x <- paste(c(x, ""), collapse = "\n")
+  hook_output(x, options)
+})
+
+# http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html
+```
+
+
+# Day 5 Outline:
+1. Packages and Help Pages 
+2. Introduction to dplyr 
+3. Introduction to ggplot2 
+4. Tips on Using R Markdown
+
+# 1. Packages and Help Pages 
+
+You are not the only person writing your own functions with R. Many professors, programmers, and statisticians use R to design tools that can help people analyze data. They then make these tools free for anyone to use. To use these tools, you just have to download them. They come as preassembled collections of functions and objects called **packages**. 
+
+
+## 1.1 Installing Packages 
+
+To use an R package, you must first **install** it on your computer and then **load** it in your current R session. The easiest way to install an R package is with the **install.packages()** R function. Open R and type the following into the command line: 
+
+```{r eval = FALSE}
+install.packages("<package name>")
+```
+
+This will search for the specified package in the collection of packages hosted on the CRAN site. When R finds the package, it will download it into a **libraries** folder on your computer. R can access the package here in future R sessions without reinstalling it. 
+
+Anyone can write an R package and disseminate it as they like; however, almost all R packages are published through the CRAN website. CRAN tests each R package before publishing it. This does not eliminate every bug inside a package, but it does mean that you can trust a package on CRAN to run in the current version of R on your OS.
+
+You can **install multiple packages** at once by linking their names with R’s concatenate function, **c()**. 
+
+For example, to install the ggplot2, data.table and dplyr packages, run:
+```{r eval=FALSE}
+install.packages(c("ggplot2", "data.table", "dplyr"))
+```
+
+If this is your first time installing a package, R will prompt you to choose an online mirror of to install from. Mirrors are listed by location. Your downloads should be the quickest if you select a mirror that is closest to you. If you want to download a new package, you can pick any of the mirrors listed under USA. 
+
+
+
+## 1.2 Loading Packages 
+Installing a package does not immediately place its functions at your fingertips. It just downloads them to your computer. To use an R package, you next have to **load** it in your R session with the command:
+
+```{r eval = FALSE}
+library(<package name>)
+
+# or equivalently 
+library("<package name>")
+
+# For example: 
+library(dplyr)
+```
+
+Quotation marks are **optional** for the **library()** command, but it is **required** for the **install.packages()** command. 
+
+**library()** will make all of the package’s functions, data sets, and help files available to you until you close your current R session. The next time you begin an R session, you will have to reload the package with library if you want to use it, but you do not need to reinstall it. You only have to install each package once on your computer. After that, a copy of the package will live in your R library. To see which packages you currently have in your R library, run:
+
+```{r eval = FALSE}
+library()
+```
+
+**library()** also shows the path to your actual R library, which is the folder that contains your R packages. You may notice many packages that you do not remember installing. This is because R automatically downloads a set of useful packages when you first install R, which are sometimes refereed to as base R or the R base packages. For example, the min(), max(), summary(), and hist() functions that you have used all come with base R. 
+
+
+## 1.3 Help Pages 
+
+There are over 1,000 functions at the core of R, and new R functions are created all of the time. This can be a lot of material to memorize and learn! Luckily, each R function comes with its own help page, which you can access by typing the function’s name after a question mark. 
+
+For example, each of these commands below will open a help page. Look for the pages to appear in the Help tab of RStudio’s bottom-right pane! 
+
+```{r eval=FALSE}
+help(lm)
+help("lm") # quotation marks are optional 
+?lm
+?"lm"
+?sample
+```
+
+To access help for a function in a package that is NOT currently loaded, you can specify the function name, in addition to the name of the package. For example, you can use the following code to obtain documentation for the **rlm()** function in the MASS package. 
+```{r}
+help(rlm, package = "MASS")
+help(package="MASS")
+```
+
+Help pages contain useful information about what each function does. These help pages also serve as code documentation, so reading them can be bittersweet. They often seem to be written for people who already understand the function and do not need help. 
+
+Don’t let this bother you! You can gain a lot from a help page by scanning it for information that makes sense and glossing over the rest. This technique will inevitably bring you to the most helpful part of each help page: **the bottom**. Here, almost every help page includes some example code that puts the function in action. Running this code is a great way to learn by example.
+
+Each help page is divided into sections. Which sections appear can vary from help page to help page, but you can usually expect to find these useful topics:
+
+* Description - A short summary of what the function does.
+* Usage - An example of how you would type the function. Each argument of the function will appear in the order R expects you to supply it (if you don’t use argument names).
+* Arguments - A list of each argument the function takes, what type of information R expects you to supply for the argument, and what the function will do with the information.
+* Details - A more in-depth description of the function and how it operates. The details section also gives the function author a chance to alert you to anything you might want to know when using the function.
+* Value - A description of what the function returns when you run it.
+* See Also - A short list of related R functions.
+* References - Papers or Books that published this R package.
+* Examples - Example code that uses the function and is guaranteed to work. The examples section of a help page usually demonstrates a couple different ways to use a function. This helps give you an idea of what the function is capable of.
+
+Let's go through the parts of a help page together! 
+First, open the help page. It will appear in the same pane in RStudio as your plots did (but in the Help tab, not the Plots tab):
+```{r eval = FALSE}
+?sample
+```
+
+Unfortunately, the **help()** function and the **?** operator are only useful if you already know the name of the function or package that you wish to use. If you would like to look up the help page for a function but have forgotten the function’s name, you can search by keyword.
+
+To do this, you can use the **help.search()** funciton or the **??** folowed by a keyword in your console. R will pull up a list of links to help pages related to the keyword. You can think of this as the help page for the help page. 
+
+For example: 
+```{r eval = FALSE}
+??log
+```
+
+
+## \textcolor{red}{In-class exercises 5.1:}
+
+1. Install the packages **dplyr** and **ggplot2**.
+2. Load the packages into your current R Session.
+3. Use the help function to get a brief understanding of the two packages, and find out what functions are made available from these packages. 
+
+
+
+\newpage
+
+# 2. Introduction to dplyr 
+
+When working with data you must:
+
+* Figure out what you want to do.
+* Describe those tasks in the form of a computer program.
+* Execute the program.
+
+The dplyr package makes these steps fast and easy:
+
+* By constraining your options, it helps you think about your data manipulation challenges.
+* It provides simple functions that correspond to the most common data manipulation tasks, to help you translate your thoughts into code.
+* It uses efficient backends, so you spend less time waiting for the computer.
+
+Here we will introduce you to dplyr's basic set of tools and show you how to apply them to dataframes. 
+
+```{r}
+# # If you have not installed the package dplyr, 
+# # please un-comment and run the following line in your console.
+# install.packages("dplyr")
+library(dplyr)
+# We will use the same worldTFR dataset again for simplicity. 
+worldTFR <- read.csv("worldTFR.csv")
+# View(worldTFR)
+```
+
+
+## dplyr Verbs
+
+**dplyr** aims to provide a function for each basic **verb** of data manipulation. These verbs can be organized into three categories based on the component of the dataset that they work with:
+
+1. Rows:
+
+* filter() chooses rows based on column values.
+* slice() chooses rows based on location.
+* arrange() changes the order of the rows.
+
+2. Columns:
+
+* select() changes whether or not a column is included.
+* rename() changes the name of columns.
+* mutate() changes the values of columns and creates new columns.
+* relocate() changes the order of the columns.
+
+3 Groups of rows:
+
+* summarise() collapses a group into a single row.
+
+
+## The Pipe
+
+All of the **dplyr** functions take a **dataframe** as the first argument. Rather than forcing the user to either save intermediate objects or nest functions, dplyr provides the **%>%** operator. For example, x %>% f(y) turns into f(x, y), so the result from one step is then “piped” into the next step. You can use the pipe to rewrite multiple operations that you can read left-to-right, top-to-bottom (reading the pipe operator as “then”).
+
+
+## 2.1 Filter rows with filter()
+
+**filter()** allows you to select a subset of rows in a data frame. Like all single verbs, the first argument is the dataframe (or sometimes called the tibble). The second and subsequent arguments refer to **variables within that dataframe**. The function will select rows where the expression is evaluated to TRUE. 
+
+For example, we can select all rows with STATE as Missouri:
+
+```{r output.lines = 3}
+# check structure of your df first
+filter(worldTFR, Year == "1950")
+
+# or equivalently using the pipe operator
+# This is a cleaner approach 
+worldTFR %>% filter(Year == "1950") 
+```
+
+This is roughly equivalent to this base R code:
+```{r output.lines = 3}
+worldTFR[worldTFR$Year == "1950", ] # Don't forget the comma!
+```
+
+You can always add more conditions to your expression using commas. 
+```{r}
+worldTFR %>% filter(Year == "1950", TFR >= 7.5, Uncode > 500)
+```
+
+This function also offers an alternative way to filter NA values. For example:
+```{r output.lines = 3}
+worldTFR %>% filter(!is.na(GDPpc))
+# You can also add more conditions here: 
+worldTFR %>% filter(!is.na(GDPpc), TFR > 5)
+```
+
+
+## 2.2 Arrange rows with arrange()
+
+**arrange()** works similarly to filter() except that instead of filtering or selecting rows, it **reorders** them. It takes a data frame, and a set of column names (or more complicated expressions) to order by. If you provide more than one column name, each additional column will be used to break ties in the values of preceding columns. 
+
+```{r output.lines = 3}
+worldTFR.na <- worldTFR %>% filter(complete.cases(.))
+# equivalently to: na.omit(worldTFR)
+# summary(worldTFR.na)
+
+worldTFR.na %>% arrange(Year, TFR)
+```
+
+
+Use desc() to order a column in descending order:
+```{r output.lines = 3}
+# desc in Year, but still ascending in TFR
+worldTFR.na %>% arrange(desc(Year), TFR)
+```
+
+
+## 2.3 Choose rows using their position with slice()
+
+**slice()** lets you index rows by their (integer) locations. It allows you to select, remove, and duplicate rows.
+
+We can get characters from row numbers 5 through 10.
+
+```{r output.lines = 3}
+worldTFR.na %>% slice(5:10)
+```
+
+It is accompanied by a number of helpers for common use cases.
+
+
+### 2.3.1 slice_head() and slice_tail() select the first or last rows.
+
+Get the first three rows: 
+```{r output.lines = 3}
+worldTFR.na %>% slice_head(n = 3)
+```
+
+Get the last three rows: 
+```{r output.lines = 3}
+worldTFR.na %>% slice_tail(n = 3)
+```
+
+
+### 2.3.2 slice_sample() randomly selects rows. 
+
+
+Each time you run the function, it should give you a different set of rows. 
+
+```{r output.lines = 3}
+worldTFR.na %>% slice_sample(n = 5)
+```
+
+Use the option **prop** to choose a certain proportion of the cases.
+```{r output.lines = 3}
+worldTFR.na %>% slice_sample(prop = 0.1)
+```
+
+Use **replace = TRUE** to perform a bootstrap sample.
+```{r output.lines = 3}
+worldTFR.na %>% slice_sample(prop = 0.1, replace = TRUE)
+```
+
+
+### 2.3.3 slice_min() and slice_max() select rows with highest or lowest values of a variable. 
+
+
+Note that we first must choose only the values which are not NA. Remember on Day 1 we covered that R can not make comparison that involves NA values. 
+
+```{r output.lines = 3}
+worldTFR %>%
+  filter(!is.na(GDPpc)) %>% # you can have multiple pipes
+  slice_max(GDPpc, n = 3)
+
+worldTFR %>%
+  filter(!is.na(Yschooling)) %>% 
+  slice_max(TFR, n = 3)
+```
+
+
+## 2.4 Select columns with select()
+
+It is often that when you work with large datasets with lots of columns, only a few are actually of interest to you. **select()** allows you to rapidly zoom in on a useful subset. 
+
+### 2.4.1 Select columns by name
+
+Select the following three columns: 
+```{r eval = FALSE}
+worldTFR %>% select(CountryCode, Year, TFR)
+```
+
+Be careful when running the select function after you loaded the "MASS" package. The select() function from dplyr will clash with the same select() function from MASS, which generates an error like this: 
+```{r eval = F}
+Error in select(., CountryCode, Year, TFR) : unused arguments (CountryCode, Year, TFR) 
+```
+
+You can fix this error by using the following code instead. This explicitly tells R to use the select() function from the dplyr package. 
+```{r output.lines = 3}
+worldTFR %>% dplyr::select(CountryCode, Year, TFR)
+```
+
+
+### 2.4.2 Select all columns between two columns 
+
+Select all columns between Year and LifeExpB (inclusive): 
+```{r output.lines = 3}
+worldTFR.na %>% select(Year:LifeExpB)
+```
+
+
+### 2.4.3 Select all columns except some
+
+Select all columns except those from NAME to STATE (inclusive): 
+```{r output.lines = 3}
+worldTFR.na %>% select(!(Year:LifeExpB))
+```
+
+
+## 2.5 Add new columns with mutate()
+
+Besides selecting sets of existing columns, it’s often useful to add new columns that are functions of existing columns. 
+
+This is the job of **mutate()**.
+
+For example: 
+```{r output.lines = 3}
+worldTFR.na %>% mutate(ChildBearing_r = round(ChildBearing,0))
+```
+
+
+## 2.6 Storing the results to a new dataframe 
+
+You can always store your results to a new dataframe.
+
+```{r output.lines = 3}
+# Can you explain what this code block does? 
+df <- worldTFR %>% 
+  mutate(ChildBearing_r = round(ChildBearing,0)) %>%
+  filter(!is.na(GDPpc), !is.na(Yschooling), TFR > 5) %>%
+  select(CountryCode, Year, TFR, GDPpc, Yschooling, ChildBearing_r)
+# View(df)
+```
+
+Or you can also make these changes **in place** by storing it to your original dataframe. 
+```{r eval = F}
+worldTFR <- worldTFR %>% 
+  mutate(ChildBearing_r = round(ChildBearing,0)) %>%
+  filter(!is.na(GDPpc), !is.na(Yschooling), TFR > 5) %>%
+  select(CountryCode, Year, TFR, GDPpc, Yschooling, ChildBearing_r)
+```
+
+If you would like to learn more about dplyr, you can read through the documentation for dplyr:
+
+[https://cran.r-project.org/web/packages/dplyr/vignettes/dplyr.html]
+
+
+## \textcolor{red}{In-class exercises 5.2:}
+
+Let's apply the tools we learned with the **worldTFR** dataset! 
+
+1. Select the first 10 rows and last 3 rows of worldTFR.
+
+4. Select the 100th to 110th rows.
+
+2. Select all rows where Year is 1951 and TFR is greater than 6. 
+
+3. Order your result from Q2 by TFR in descending order. 
+
+5. Randomly sample 100 rows with replacement and order the rows by Year in ascending order. 
+
+6. Select columns: Country, Year, TFR, and store them into a new dataframe. 
+
+7. Select all columns except CountryCode. 
+
+8. Create a new column called **ChildBearing_sd** where you subtract the mean of the column from its original value and divide the result by the standard deviation of the column. 
+
+9. Create a new column called **GPDpc_sd** where you do a similar operation as in Q8. 
+
+
+\newpage
+
+# 3. Introduction to ggplot2
+
+We need to first install and load the package. 
+```{r}
+# install.packages("ggplot2")
+library(ggplot2)
+```
+
+## 3.1 How to Make a Simple Scatterplot 
+
+```{r}
+data = USArrests # built-in dataset 
+# ?USArrests
+ggplot(data, aes(x = UrbanPop, y = Assault)) + geom_point()
+# sort of equivalent to doing this with the baseplot 
+plot(data$UrbanPop, data$Assault)
+# ?ggplot
+```
+
+We got a basic scatterplot, where each point represents a US state. However, it lacks some basic components such as the plot title, meaningful axis labels, etc. 
+
+
+Like geom_point(), there are many such geom layers to use for visualization. For now, let’s just add a smoothing layer using **geom_smooth(method = 'lm')**. Since the method is set as lm (short for linear model), it draws the line of best fit. The line of best fit is in blue by default. The shaded area is the confidence intervals. 
+```{r}
+ggplot(data, aes(x=UrbanPop, y=Assault)) + 
+  geom_point() + 
+  geom_smooth(method="lm") 
+```
+
+
+## 3.2 Adjusting the X and Y Axis Limits
+
+We can delete the points outside our range. This will change the lines of best fit or smoothing lines as compared to the original data. This can be done by **xlim()** and **ylim()**. You can pass a numeric vector of length 2 (with max and min values) or just the max and min values itself.
+
+```{r}
+ggplot(data, aes(x=UrbanPop, y=Assault)) + 
+  geom_point() + 
+  geom_smooth(method="lm")  + 
+  xlim(c(40, 80)) + ylim(c(0, 350))   # deletes points
+```
+
+
+## 3.3 Change the Title and Axis Labels
+
+```{r}
+ggplot(data, aes(x=UrbanPop, y=Assault)) + 
+  geom_point() + 
+  geom_smooth(method="lm") +
+  xlim(c(30, 90)) + ylim(c(0, 350)) +
+  labs(title="Urban Population VS Assault", 
+         subtitle="Using the built-in dataset USArrests", 
+       y="Assault", x="Urban Population") # adding labels here 
+```
+
+You can also get the same plot by adding the labels using an alternative way: 
+```{r}
+ggplot(data, aes(x=UrbanPop, y=Assault)) + 
+  geom_point() + 
+  geom_smooth(method="lm") +
+  xlim(c(30, 90)) + ylim(c(0, 350)) +
+  ggtitle("Urban Population Vs Assault", 
+            subtitle="Using the built-in dataset USArrests") + 
+  xlab("Urban Population") + 
+  ylab("Assault")
+```
+
+
+## 3.4 Change the Color and Size of Points
+
+We can change the aesthetics of a geom layer by modifying the respective **geoms**. Let’s change the color of the points and the line to a static value. R has a limited number of colors to use by their name, such as red, blue, yellow, etc. But you can always use html color codes to make your plots more colorful! 
+
+```{r}
+ggplot(data, aes(x=UrbanPop, y=Assault)) + 
+  geom_point() + 
+  geom_smooth(method="lm",  col="skyblue") + # change the color of line 
+  xlim(c(30, 90)) + ylim(c(0, 350)) +
+  labs(title="Urban Population VS Assault", 
+         subtitle="Using the built-in dataset USArrests", 
+       y="Assault", x="Urban Population") +
+  geom_point(col="pink", size=3) # Set static color and size for points
+```
+
+
+**ggplot2** is a very powerful package for visualizing your data. 
+
+If you would like to learn more about what it is capable to do, check out this website: 
+
+http://r-statistics.co/Complete-Ggplot2-Tutorial-Part1-With-R-Code.html
+
+
+
+## 3.5 Saving your plots 
+
+**ggsave()** is a convenient function for saving a plot. 
+
+It defaults to saving the last plot that you displayed, using the size of the current graphics device. It also guesses the type of graphics device from the extension.
+
+It has many different arguments that you can customize. We will not cover how to use each argument, but you can learn more about them in the documentation for ggplot.
+```{r eval=FALSE}
+# The following code chunk is not executable. 
+ggsave(
+  filename,
+  plot = last_plot(),
+  device = NULL,
+  path = NULL,
+  scale = 1,
+  width = NA,
+  height = NA,
+  units = c("in", "cm", "mm", "px"),
+  dpi = 300,
+  limitsize = TRUE,
+  bg = NULL,
+  ...
+)
+```
+
+For example, you can save the plot above like this: 
+
+```{r eval = FALSE}
+ggplot(data, aes(x=UrbanPop, y=Assault)) + 
+  geom_point() + 
+  geom_smooth(method="lm",  col="skyblue") +
+  xlim(c(30, 90)) + ylim(c(0, 350)) +
+  labs(title="Urban Population VS Assault", 
+         subtitle="Using the built-in dataset USArrests", 
+       y="Assault", x="Urban Population") +
+  geom_point(col="pink", size=3)
+
+ggsave("myplot.png")
+```
+
+When having multiple plots, you can also save your plots to objects and then export to images. For example: 
+```{r eval = F}
+g1 <- ggplot(data, aes(x=UrbanPop, y=Assault)) + 
+          geom_point() + 
+          geom_smooth(method="lm",  col="skyblue") +
+          xlim(c(30, 90)) + ylim(c(0, 350)) +
+          labs(title="Urban Population VS Assault", 
+                 subtitle="Using the built-in dataset USArrests", 
+               y="Assault", x="Urban Population") +
+          geom_point(col="pink", size=3)
+
+ggsave("myplot.pdf", plot = g1) 
+```
+
+
+## \textcolor{red}{In-class exercises 5.3:}
+
+1. Omit all NA's from worldTFR.
+
+2. Make a plot where the horizontal axis is LifeExpB and vertical axis is TFR.
+
+3. Set the color to red, and size for points as 0.5
+
+4. Add appropriate label for the axis and the plot. 
+
+6. Create a new directory named plots, and save your plot as TFR.png into plots. 
+
+
+\newpage
+
+# 4. Tips on Using R Markdown
+
+R Markdown is a file format for making dynamic documents with R. An R Markdown document is written in markdown (an easy-to-write plain text format) and contains chunks of embedded R code. For assignments in QPM I and II, you will often need to turn in your assignments in PDFs with LaTex content and R code chunks, not raw R scripts. Using R Markdown makes the process much easier! 
+
+For the content below, you need to knit the R markdown file into PDF to view how the content will be displayed. 
+
+## 4.1 Formatted Text
+
+The text in R markdown shares a similar syntax with LaTex that you have been using in Math Modeling. 
+
+You can use hashtags to create headers. 
+
+# Header 1
+
+## Header 2 
+
+### Header 3
+
+#### Header 4
+
+
+
+You can create italicized text with *asterisks*, 
+
+and bold text with **double asterisks.** 
+
+You can also create an ordered list like this: 
+
+1. item 1
+2. item 2
+3. item 3
+
+Or an unordered list like this: 
+
+* item 1
+* item 2
+* item 3
+
+
+## 4.2 Embedded R Code
+
+The **knitr** package (which you all have installed on Day 1!) extends the basic markdown syntax to include chunks of executable R code. 
+
+You can type $` ` `$
+followed by \{r\} to start your R code block. 
+Then close the code block using $` ` `$.
+
+Alternatively, you can use the appropriate keyboard shortcut for your OS! 
+
+
+## 4.3 Adding Images 
+
+When you create an image in your code block in R Markdown, it will automatically be added to the PDF when you knit it. 
+
+For example, 
+```{r}
+plot(1:100, sample(1:10000, 100))
+```
+
+However, when you need to add images from an image file, you can do it by typing: 
+
+```{r eval=FALSE}
+![name of your image](path-to-image-here)
+```
+
+For example, 
+
+```{r eval=FALSE}
+![Pongki Checkout her YouTube Channel: RuPong house](/Users/ysui/Desktop/Prep_Rcamp/Day5/pongki.jpeg){width=80%}
+```
+
+![Pongki Checkout her YouTube Channel: RuPong house](/Users/ysui/Desktop/Prep_Rcamp/Day5/pongki.jpeg){width=80%}
