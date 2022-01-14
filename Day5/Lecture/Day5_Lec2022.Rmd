@@ -48,11 +48,11 @@ You are not the only person writing your own functions with R. Many professors, 
 
 To use an R package, you must first **install** it on your computer and then **load** it in your current R session. The easiest way to install an R package is with the **install.packages()** R function. Open R and type the following into the command line: 
 
-```{r eval = FALSE}
+```{r eval = FALSE tidy = TRUE}
 install.packages("<package name>")
 ```
 
-This will search for the specified package in the collection of packages hosted on the CRAN site. When R finds the package, it will download it into a **libraries** folder on your computer. R can access the package here in future R sessions without reinstalling it. 
+This will search for the specified package in the collection of packages hosted on the CRAN site. When R finds the package, it will download it into a **library** folder on your computer. R can access the package here in future R sessions without reinstalling it. 
 
 Anyone can write an R package and disseminate it as they like; however, almost all R packages are published through the CRAN website. CRAN tests each R package before publishing it. This does not eliminate every bug inside a package, but it does mean that you can trust a package on CRAN to run in the current version of R on your OS.
 
@@ -63,7 +63,7 @@ For example, to install the ggplot2, data.table and dplyr packages, run:
 install.packages(c("ggplot2", "data.table", "dplyr"))
 ```
 
-If this is your first time installing a package, R will prompt you to choose an online mirror of to install from. Mirrors are listed by location. Your downloads should be the quickest if you select a mirror that is closest to you. If you want to download a new package, you can pick any of the mirrors listed under USA. 
+If this is your first time installing a package, R will prompt you to choose an online mirror to install from. Mirrors are listed by location. Your downloads should be the quickest if you select a mirror that is closest to you. If you want to download a new package, you can pick any of the mirrors listed under USA. 
 
 
 
@@ -102,6 +102,7 @@ help(lm)
 help("lm") # quotation marks are optional 
 ?lm
 ?"lm"
+help("?")
 ?sample
 ```
 
@@ -139,6 +140,7 @@ To do this, you can use the **help.search()** funciton or the **??** folowed by 
 For example: 
 ```{r eval = FALSE}
 ??log
+??dplyr
 ```
 
 
@@ -246,7 +248,7 @@ worldTFR %>% filter(!is.na(GDPpc), TFR > 5)
 ```{r output.lines = 3}
 worldTFR.na <- worldTFR %>% filter(complete.cases(.))
 # equivalently to: na.omit(worldTFR)
-# summary(worldTFR.na)
+summary(worldTFR.na)
 
 worldTFR.na %>% arrange(Year, TFR)
 ```
@@ -276,12 +278,12 @@ It is accompanied by a number of helpers for common use cases.
 
 Get the first three rows: 
 ```{r output.lines = 3}
-worldTFR.na %>% slice_head(n = 3)
+worldTFR.na %>% slice_head(n = 10)
 ```
 
 Get the last three rows: 
 ```{r output.lines = 3}
-worldTFR.na %>% slice_tail(n = 3)
+worldTFR.na %>% slice_tail(n = 10)
 ```
 
 
@@ -291,22 +293,21 @@ worldTFR.na %>% slice_tail(n = 3)
 Each time you run the function, it should give you a different set of rows. 
 
 ```{r output.lines = 3}
-worldTFR.na %>% slice_sample(n = 5)
+worldTFR.na %>% slice_sample(n = 10)
 ```
 
 Use the option **prop** to choose a certain proportion of the cases.
 ```{r output.lines = 3}
-worldTFR.na %>% slice_sample(prop = 0.1)
+worldTFR.na %>% slice_sample(prop = 0.3)
 ```
 
 Use **replace = TRUE** to perform a bootstrap sample.
 ```{r output.lines = 3}
-worldTFR.na %>% slice_sample(prop = 0.1, replace = TRUE)
+worldTFR.na %>% slice_sample(prop = 0.1, replace = FALSE)
 ```
 
 
 ### 2.3.3 slice_min() and slice_max() select rows with highest or lowest values of a variable. 
-
 
 Note that we first must choose only the values which are not NA. Remember on Day 1 we covered that R can not make comparison that involves NA values. 
 
@@ -329,7 +330,7 @@ It is often that when you work with large datasets with lots of columns, only a 
 
 Select the following three columns: 
 ```{r eval = FALSE}
-worldTFR %>% select(CountryCode, Year, TFR)
+worldTFR %>% select("CountryCode", Year, TFR)
 ```
 
 Be careful when running the select function after you loaded the "MASS" package. The select() function from dplyr will clash with the same select() function from MASS, which generates an error like this: 
@@ -386,7 +387,8 @@ df <- worldTFR %>%
 
 Or you can also make these changes **in place** by storing it to your original dataframe. 
 ```{r eval = F}
-worldTFR <- worldTFR %>% 
+worldTFR <- read.csv("worldTFR.csv")
+df2 <- worldTFR %>% 
   mutate(ChildBearing_r = round(ChildBearing,0)) %>%
   filter(!is.na(GDPpc), !is.na(Yschooling), TFR > 5) %>%
   select(CountryCode, Year, TFR, GDPpc, Yschooling, ChildBearing_r)
@@ -403,11 +405,17 @@ Let's apply the tools we learned with the **worldTFR** dataset!
 
 1. Select the first 10 rows and last 3 rows of worldTFR.
 
-4. Select the 100th to 110th rows.
+```{r}
+dim(worldTFR)[1]
+worldTFR  %>% slice(c(1:10 , 12340:12342))
+# View(df4)
+```
 
-2. Select all rows where Year is 1951 and TFR is greater than 6. 
+2. Select the 100th to 110th rows.
 
-3. Order your result from Q2 by TFR in descending order. 
+3. Select all rows where Year is 1951 and TFR is greater than 6. 
+
+4. Order your result from Q2 by TFR in descending order. 
 
 5. Randomly sample 100 rows with replacement and order the rows by Year in ascending order. 
 
@@ -417,7 +425,7 @@ Let's apply the tools we learned with the **worldTFR** dataset!
 
 8. Create a new column called **ChildBearing_sd** where you subtract the mean of the column from its original value and divide the result by the standard deviation of the column. 
 
-9. Create a new column called **GPDpc_sd** where you do a similar operation as in Q8. 
+9. Create a new column called **GDPpc_sd** where you do a similar operation as in Q8. 
 
 
 \newpage
@@ -448,13 +456,13 @@ Like geom_point(), there are many such geom layers to use for visualization. For
 ```{r}
 ggplot(data, aes(x=UrbanPop, y=Assault)) + 
   geom_point() + 
-  geom_smooth(method="lm") 
+  geom_smooth(method="lm", se = TRUE) 
 ```
 
 
 ## 3.2 Adjusting the X and Y Axis Limits
 
-We can delete the points outside our range. This will change the lines of best fit or smoothing lines as compared to the original data. This can be done by **xlim()** and **ylim()**. You can pass a numeric vector of length 2 (with max and min values) or just the max and min values itself.
+We can delete the points outside our range. This will change the lines of best fit or smoothing lines as compared to the original data. This can be done by **xlim()** and **ylim()**. You can pass a numeric vector of length 2 (with min and max values) or just the max and min values itself.
 
 ```{r}
 ggplot(data, aes(x=UrbanPop, y=Assault)) + 
@@ -495,13 +503,12 @@ We can change the aesthetics of a geom layer by modifying the respective **geoms
 
 ```{r}
 ggplot(data, aes(x=UrbanPop, y=Assault)) + 
-  geom_point() + 
-  geom_smooth(method="lm",  col="skyblue") + # change the color of line 
+  geom_smooth(method="lm",  col="#D35FB7") + # change the color of line 
   xlim(c(30, 90)) + ylim(c(0, 350)) +
   labs(title="Urban Population VS Assault", 
          subtitle="Using the built-in dataset USArrests", 
        y="Assault", x="Urban Population") +
-  geom_point(col="pink", size=3) # Set static color and size for points
+  geom_point(col="pink", size=1) # Set static color and size for points
 ```
 
 
@@ -571,14 +578,37 @@ ggsave("myplot.pdf", plot = g1)
 ## \textcolor{red}{In-class exercises 5.3:}
 
 1. Omit all NA's from worldTFR.
+```{r}
+df <- na.omit(worldTFR)
+```
 
 2. Make a plot where the horizontal axis is LifeExpB and vertical axis is TFR.
+```{r}
+ggplot(df, aes(x = LifeExpB, y = TFR)) + geom_point(col = "skyblue", size = 0.5)
+```
+
 
 3. Set the color to red, and size for points as 0.5
+```{r}
+ggplot(df, aes(x = LifeExpB, y = TFR)) + geom_point(col = "red", size = 0.5)
+```
+
 
 4. Add appropriate label for the axis and the plot. 
+```{r}
+g2 <- ggplot(df, aes(x = LifeExpB, y = TFR)) + 
+  geom_point(col = "red", size = 0.5) +
+  labs(title="Relationship between TFR and LifeExpB", 
+       y="Total Fertility Rate", x="Life Expectancy at Birth")
+```
 
-6. Create a new directory named plots, and save your plot as TFR.png into plots. 
+
+5. Create a new directory named plots, and save your plot as TFR.png into plots. 
+
+```{r}
+dir.create("plots")
+ggsave("g2.png", plot = g2)
+```
 
 
 \newpage
@@ -588,6 +618,8 @@ ggsave("myplot.pdf", plot = g1)
 R Markdown is a file format for making dynamic documents with R. An R Markdown document is written in markdown (an easy-to-write plain text format) and contains chunks of embedded R code. For assignments in QPM I and II, you will often need to turn in your assignments in PDFs with LaTex content and R code chunks, not raw R scripts. Using R Markdown makes the process much easier! 
 
 For the content below, you need to knit the R markdown file into PDF to view how the content will be displayed. 
+
+$$ \pi = 3.14 $$
 
 ## 4.1 Formatted Text
 
