@@ -15,7 +15,8 @@ knitr::opts_chunk$set(echo = TRUE)
 3. The Basics 
 4. R Objects 
 
-Please find the most updated materials here: https://github.com/CeciliaYSui/RCamp2022
+Please find the most updated materials here:
+[https://github.com/peterjbachman/RCamp2023](https://github.com/peterjbachman/RCamp2023)
 
 # 1. Why should we learn R?
 
