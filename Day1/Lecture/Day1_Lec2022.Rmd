@@ -1,7 +1,7 @@
 ---
 title: "Day 1 Lecture"
 author: "Cecilia Sui"
-date: "`r format(Sys.time(), '%d/%m/%y')`"
+date: "`r format(Sys.time(), '%m/%d/%y')`"
 output: pdf_document
 ---
 
