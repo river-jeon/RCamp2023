@@ -40,20 +40,20 @@ Please find the most updated materials here: https://github.com/CeciliaYSui/RCam
 ## 2.1 Installing R
 
 <p>
-![The R Project for Statistical Computing](/Users/ysui/Desktop/R_Camp/Day1/pics/Install1.png){width=70%}
+![The R Project for Statistical Computing](/Users/peter/Code/RCamp2023/Day1/Lecture/pics/Install1.png){width=70%}
 </p>
 
 <p>
-![CRAN Mirrors](/Users/ysui/Desktop/R_Camp/Day1/pics/Install2.png){width=70%}
+![CRAN Mirrors](/Users/peter/Code/RCamp2023/Day1/Lecture/pics/Install2.png){width=70%}
 </p>
 <p>
-![Choose your OS](/Users/ysui/Desktop/R_Camp/Day1/pics/Install3.png){width=70%}
+![Choose your OS](/Users/peter/Code/RCamp2023/Day1/Lecture/pics/Install3.png){width=70%}
 </p>
 <p>
-![macOS download](/Users/ysui/Desktop/R_Camp/Day1/pics/Install4.png){width=70%}
+![macOS download](/Users/peter/Code/RCamp2023/Day1/Lecture/pics/Install4.png){width=70%}
 </p>
 <p>
-![Windows download](/Users/ysui/Desktop/R_Camp/Day1/pics/Install5.png){width=70%}
+![Windows download](/Users/peter/Code/RCamp2023/Day1/Lecture/pics/Install5.png){width=70%}
 </p>
 
 Just follow the standard installation instructions and you should be good!
@@ -68,16 +68,16 @@ If you are on a Linux computer, you are probably already super familiar with wha
 
 R Studio makes using R a lot easier! 
 <p>
-![RStudio download page](/Users/ysui/Desktop/R_Camp/Day1/pics/Install6.png){width=70%}
+![RStudio download page](/Users/peter/Code/RCamp2023/Day1/Lecture/pics/Install6.png){width=70%}
 </p>
 <p>
-![Download RStudio Desktop (free version)](/Users/ysui/Desktop/R_Camp/Day1/pics/Install7.png){width=70%}
+![Download RStudio Desktop (free version)](/Users/peter/Code/RCamp2023/Day1/Lecture/pics/Install7.png){width=70%}
 </p>
 <p>
-![Choose the one for your OS](/Users/ysui/Desktop/R_Camp/Day1/pics/Install8.png){width=70%}
+![Choose the one for your OS](/Users/peter/Code/RCamp2023/Day1/Lecture/pics/Install8.png){width=70%}
 </p>
 <p>
-![R Studio Overview](/Users/ysui/Desktop/R_Camp/Day1/pics/RStudio.png){width=70%}
+![R Studio Overview](/Users/peter/Code/RCamp2023/Day1/Lecture/pics/RStudio.png){width=70%}
 </p>
 
 
