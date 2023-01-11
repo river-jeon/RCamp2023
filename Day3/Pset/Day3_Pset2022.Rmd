@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 # Day 3 Outline:
 1. Functions & Arguments 
 2. Control Statements (if, if-else, for, while)
-3. Bootstrapping
+3. Boostrapping
 
 
 # Functions 
@@ -22,11 +22,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r}
 choose.members = function(n,c,p) {
-  return(factorial(n)*choose(p,n) * choose(p-n,c))
+  
   ### YOUR CODE GOES HERE
+
 }
-choose.members(3,3,10)
-choose.members(4,4,12)
 ```
 
 
@@ -35,18 +34,11 @@ choose.members(4,4,12)
 ```{r}
 is.even = function(n) {
   ### YOUR CODE GOES HERE
-  return(n %% 2 == 0)
 }
 
 evens.in = function(v) {
   ### YOUR CODE GOES HERE
-  return(v[is.even(v)])
 }
-
-v = 1:10
-# is.even(v) # "logical"
-v[is.even(v)] # access / subset values using logicals 
-
 ```
 
 3. Describe what the following function does in the context of statistics. Be as specific as you can, without knowing the value of data. Make sure you understand every operator and every function used in every line of the code.
@@ -62,7 +54,7 @@ mystery <- function(data){
 ```
 
 
-4. Assume that a data set is stored in the vector **data** in R. You do not need the actual values for **data** for this question. Write a function **skewness(data)** that calculates the skewness index $I = \frac{3(\bar{x}-Q_2)}{s}$ of the data set and returns either "The data is significantly skewed" or "The data is not significantly skewed" as appropriate. If the skewness is greater than 1, it is skewed. 
+4. Assume that a data set is stored in the vector **data** in R. You do not need the actual values for **data** for this question. Write a function **skewness(data)** that calculates the skewness index $I = \frac{3(\bar{x}-Q_2)}{s}$ of the data set and returns either "The data is significantly skewed" or "The data is not significantly skewed" as appropriate. 
 
 ```{r eval = FALSE}
 skewness <- function(data) {
@@ -100,35 +92,13 @@ You can also use the **sample()** function to simulate an opinion poll. Suppose 
 * 2.2 Take the mean of the sample. Write your code to simulate the opinion poll 10 times and calculates the proportion who like barbeque. 
 
 
-3. **FiveThirtyEight** calculates that President Biden's approval rating, accounting for each poll's quality, tendency, sample size and partisan lean, is around 45%. The number might be a little bit different today, but lets go ahead with it nevertheless.
+3. **FiveThirtyEight** calculates that President Biden's approval rating, accounting for each poll's quality, recency, sample size and partisan lean, is around 45%. The number might be a little bit different today, but lets go ahead with it nevertheless.
 
-* 3.1 Simulate drawing an opinion poll of 25 people. Repeat this 50 times. Then simulate drawing 100 people, and repeat this 50 times. Then simulate drawing 1000 people, and repeat this 50 times. Make sure to store the mean, median, variance and standard deviations to use for the following questions.
+* 3.1 Simulate drawing an opinion poll of 25 people. Repeat this 50 times. Then simulate drawing 100 people, and repeat this 50 times. Then simulate drawing 1000 people, and repeat this 50 times.
 
 * 3.2 How does the central tendency of the survey results change as the sample size increases?
 
 * 3.3 How does the spread of the survey results change as the sample size increases?
-```{r}
-sample(x = c(0,1), size = 25, replace = TRUE, prob = c(0.55, 0.45))
-
-# poll1 
-mean1 <- rep(NA, 50)
-var1 <- rep(NA, 50)
-median1 <- rep(NA, 50)
-sd1 <- rep(NA, 50)
-
-for (i in 1:50){
-  sample <- sample(x = c(0,1), size = 25, replace = TRUE, prob = c(0.55, 0.45))
-  mean1[i] <- mean(sample)
-  var1[i] <- var(sample)
-  median1[i] <- median(sample)
-  sd1[i] <- sd(sample)
-}
-c(mean(mean1), mean(var1), mean(median1), mean(sd1))
-
-# poll2
-
-
-```
 
 
 
@@ -164,12 +134,5 @@ We will use the **worldTFR** dataset again, since you are probably super familia
 
 5. Now let's bootstrap the variance of TFR. Similar to Q3, but instead of calculating the means for each sample, find the variance for each sample and store them into a vector called **vars**. Remember to first initialize the vector before storing values. 
 
-
-
-
-```{r}
-worldTFR.a <- worldTFR[!is.na(worldTFR$GDPpc),]
-dim(worldTFR.a)
-```
 
 
