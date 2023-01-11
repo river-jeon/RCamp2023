@@ -18,7 +18,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Questions: 
 
-1. Get your working directory. 
+1. Get your working directory.
+```{r}
+x <- 1
+x
+mean(x)
+```
 
 2. Create a new directory named Day2, and set your working directory to Day2.
 
