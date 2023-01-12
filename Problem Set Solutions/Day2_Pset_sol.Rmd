@@ -1,0 +1,158 @@
+---
+title: "Day2 Problem Set"
+author: "Cecilia Sui"
+date: "1/11/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Day 2 Outline:
+1. Tips on Writing Code
+2. Loading and Saving Data
+3. R Notations
+4. Modifying Values
+
+
+## 1. Get your working directory. 
+```{r eval = FALSE}
+getwd()
+```
+
+
+## 2. Create a new directory named Day2, and set your working directory to Day2.
+```{r eval = FALSE}
+dir.create("./Day2")
+setwd("/Users/ysui/Desktop/R_Camp/Day2")
+```
+
+## 3. List files in your working directory
+```{r eval = FALSE}
+list.files()
+```
+
+## 4. Load the built-in dataset "USArrests" into a dataframe called df, and view the dataframe in the R data viewer. 
+```{r}
+library(datasets)
+df <- USArrests
+# View(df)
+```
+
+## 5. Load the data from the "resources.csv" file, and store it in a dataframe named resources. This dataset is from the paper ``Does Oil Hinder Democracy?'' by Michael L. Ross (2001). 
+```{r}
+resources <- read.csv("resources.csv")
+# View(resources)
+```
+
+## 6. Find the dimension of resources How many observations and variables? What are the names of these variables (colnames)? 
+```{r}
+dim(resources)
+```
+
+
+## 7. Can you get the structure of the dataframe? 
+```{r}
+str(resources)
+```
+
+
+## 8. Select the first row and first column of resources. 
+```{r eval = FALSE}
+resources[1 , ]
+resources[ , 1]
+```
+
+## 9. The column regime stores the measurement of a country's level of democracy: $-10$ (authoritarian) to $10$ (democratic). How many countries are between $-5$ to $5$ inclusive according to this measurement?  
+```{r}
+length(resources$regime[resources$regime <= 5 & resources$regime >= -5])
+length(na.omit(resources$regime[resources$regime <= 5 & resources$regime >= -5]))
+```
+
+## 10. How many NA's does each variable have? If you drop all NA's in the dataset, how many observations are left? (Please save your new dataset without NA's as a new dataframe. Do not modify in place.)
+```{r}
+summary(resources)
+resources_na <- na.omit(resources)
+dim(resources_na)
+```
+
+
+## 11. The column "oil" tells us the amount of oil exports as a percentage of the country's GDP. Can you find how the average of oil has changed before and after omitting all NA's in the table? Why caused the change in values? 
+```{r}
+summary(resources_na)
+```
+
+
+## 12. Can you fill the NA's in each column using its mean that you found above? 
+```{r}
+resources$oil[is.na(resources$oil)] = mean(resources$oil, na.rm = TRUE) 
+resources$logGDPcp[is.na(resources$logGDPcp)] = mean(resources$logGDPcp, na.rm = TRUE) 
+resources$regime[is.na(resources$regime)] = mean(resources$regime, na.rm = TRUE) 
+resources$metal[is.na(resources$metal)] = mean(resources$metal, na.rm = TRUE) 
+resources$illit[is.na(resources$illit)] = mean(resources$illit, na.rm = TRUE) 
+resources$life[is.na(resources$life)] = mean(resources$life, na.rm = TRUE) 
+summary(resources)
+```
+
+## 13. The "illit" column shows the percentage of the population that is illiterate. Can you remove the entire column and save the new dataframe as resources? What happens if you attempt to access values in the illit column now after removal?
+```{r}
+resources[, c("illit")] = NULL
+# resources$illit
+## NULL
+```
+
+## 14. Which country has life expentacy over 76 (variable named life) in year 1980? 
+```{r}
+r1 <- resources[resources$year==1980 & resources$life > 76, ]
+r1$cty_name
+```
+
+## 15. Can you rename the column life to "life_expectancy"? 
+```{r}
+colnames(resources)[7] <- "life_expectancy"
+```
+
+
+## 16. In year 1990, which countries scored a 10 (most democratic) in their regime scores? 
+```{r}
+r2 <- resources[resources$year == 1990 & resources$regime == 10, ]
+r2$cty_name
+```
+
+
+## 17. Add a variable "life" to the data frame which should categorize the level of life expectancy: [0,50) is low,[50,70) is medium, and [70,max] is high. Remember you have already found the maximum of life expectancy above.
+```{r}
+resources$life <- as.factor(ifelse(resources$life_expectancy < 50, "low",
+                           ifelse(resources$life_expectancy < 70, "medium",
+                           ifelse(resources$life_expectancy < 100, "high"))))
+View(resources)
+```
+
+
+## 18. Can you add a dummy variable that categorizes whether a country is democratic or not? Name the new column democracy, and put 1 if it is a democracy, 0 otherwise. If regime column is 0, you can treat it as a democracy here. 
+```{r}
+resources$democracy <- ifelse(resources$regime >= 0, 1, 0)
+# View(resources)
+```
+
+
+## 19. Find out which country with low life expectancy in year 1990 has the highest amount of oil exports as a percentage of the country's GDP? What is its percent of oil exports? 
+```{r}
+r3 <- resources[resources$life == "low" & resources$year == 1990, ]
+r3[r3$oil == max(r3$oil),]
+```
+
+## 20. Save the dataframe as “new_resources.csv” into the new directory data which you need to create first.
+```{r eval = FALSE}
+write.csv(resources, "data/new_resources.csv", row.names = FALSE)
+```
+
+
+
+
+
+
+
+
+
