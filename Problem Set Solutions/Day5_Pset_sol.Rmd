@@ -1,0 +1,159 @@
+---
+title: "Day 5 Pset"
+author: "Cecilia Sui"
+date: "1/14/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Day 5 Outline:
+1. Packages and Help Pages 
+2. Introduction to dplyr 
+3. Introduction to ggplot2 
+4. Tips on Using R Markdown
+
+
+# dplyr Basics 
+We will use the resources dataset to do some exercises with dplyr
+```{r include=FALSE}
+library(dplyr)
+library(ggplot2)
+df <- read.csv("Day5/Pset/resources.csv")
+colnames(df)
+```
+
+1. Select the first 10 rows and last 3 rows. Output the rows together as the
+   same dataframe.
+```{r}
+dim(df)
+test <- df %>% slice(c(1:10, 4528:4530))
+test
+```
+
+
+2. Select all rows where Year is 1951 and regime is non-negative.
+```{r, eval=FALSE}
+df %>% filter(year == 1971, regime >= 0)
+```
+
+3. Order the rows by Year in descending order. Break ties using the column oil
+   in ascending order.
+```{r, eval=FALSE}
+df %>% arrange(desc(year), oil)
+```
+
+4. Select the 100th to 110th rows, and find the row with the highest value for
+   metal.
+```{r}
+df %>% slice(100:110) %>%
+    slice_max(metal)
+```
+
+
+5. Randomly select 10 rows with replacement, and standardize the columns oil and
+   metal.
+```{r}
+test <- df %>%
+  na.omit() %>% # This way we are only dealing with complete cases
+  slice_sample(n = 10, replace = TRUE) %>%
+  mutate(
+    oil_sd = (oil - mean(oil)) / sd(oil),
+    metal_sd = (metal - mean(metal)) / sd(metal)
+  )
+```
+
+
+6. Select columns: cty_name, year, regime, oil, illit, and life and store them
+   into a new dataframe.
+```{r}
+new_df <- df %>%
+  select(cty_name, year, regime, oil, illit, life)
+```
+
+7. Add a new column named new_oil using where the values are the product of
+   standardized oil and regime type.
+```{r}
+new_df <- new_df %>%
+  mutate(new_oil = ((oil - mean(oil, na.rm = TRUE)) / sd(oil, na.rm = TRUE)) * ((regime - mean(regime, na.rm = TRUE)) / sd(regime, na.rm = TRUE)))
+```
+
+8. Calculate the **average** oil level for **each year** from 1966 to 1997. 
+```{r}
+vec <- c()
+j <- 1
+for (i in 1966:1997) {
+  vec[j] <- mean(new_df$oil[new_df$year == i], na.rm = TRUE)
+  j <- j + 1
+}
+vec
+
+new_df %>%
+  group_by(year) %>%
+  summarise(oil = mean(oil, na.rm = TRUE))
+```
+
+9. Calculate the **median** metal value for **each** regime type from -10 to
+   +10.
+```{r}
+df %>%
+  group_by(regime) %>%
+  summarise(metal = median(metal, na.rm = TRUE))
+```
+
+# ggplot2 Basics 
+
+1. Find all the variables that negatively correlates with TFR from the
+   **worldTFR** dataset. Can you offer a reasoning of the relationships?
+```{r, eval=FALSE}
+tfr <- read.csv("Day5/Pset/worldTFR.csv") %>%
+    na.omit()
+
+# In the lm() function, if you put a . after the ~ the function
+# assumes to use all other columns
+lmTFR <- lm(TFR ~ ., data = tfr)
+
+# Values with a negative coefficient here will have some sort of negative
+# correlation with TFR
+summary(lmTFR)
+```
+
+2. Pick two variables from Q1 and use the package ggplot2 to plot them and TFR
+   separately, where the two variables you choose should be on your x-axis, and
+   TFR should be on the y-axis. Add appropriate labels. Compare the two plots
+   and explain the differences.
+```{r}
+tfr <- read.csv("Day5/Pset/worldTFR.csv") %>%
+  na.omit()
+
+ggplot(tfr, aes(x = LifeExpB, y = TFR)) +
+  geom_smooth(method = "lm") +
+  geom_point() +
+  labs(y = "Total Fertility Rate", x = "Life Expectancy")
+
+ggplot(tfr, aes(x = Pop1564Female, y = TFR)) +
+  # geom_smooth(method = "lm") +
+  geom_point() +
+  labs(y = "Total Fertility Rate", x = "lol no clue")
+```
+
+
+3. Create a new dataframe named df1, such that the dataframe has two columns:
+   Year and avg_TFR. The column Year should list the years with no duplicates,
+   and the column TFR should store the average TFR of all countries during that
+   specific year. Use the package ggplot2 to visualize the relationship between
+   Year and avg_TFR. Describe what you see.
+```{r}
+df1 <- tfr %>%
+  group_by(Year) %>%
+  summarise(avg_TFR = mean(TFR, na.rm = TRUE))
+
+ggplot(df1, aes(x = Year, y = avg_TFR)) +
+  # geom_smooth(method = "lm") +
+  geom_point() +
+  labs(y = "Total Fertility Rate", x = "Years")
+```
+
