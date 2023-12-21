@@ -1,8 +1,9 @@
-# RCamp2023
+# RCamp2024
 
 Five day R crash course
 
-Materials come from Cecilia Sui at her repo [here](https://github.com/CeciliaYSui/RCamp2022)
+Forked from Peter at his repo [here](https://github.com/peterjbachman/RCamp2023)
+which is from Cecilia Sui at her repo [here](https://github.com/CeciliaYSui/RCamp2022)
 
 More about Git and Github:
 
