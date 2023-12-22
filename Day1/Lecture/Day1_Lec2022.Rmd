@@ -195,6 +195,9 @@ Subtraction -.
 # line 1
 # line 2
 ```
+3. Multiple Comments: Block + 
+  - On Windows and Linux, Ctrl + Shift + C.
+  - On macOS, Cmd + Shift + C.
 
 
 ## \textcolor{red}{In-class exercises 1.2:}
@@ -212,6 +215,7 @@ should end up with the same number that you started with:
 39 * 3
 117 - 6
 111 /3
+
 ```
 
 
