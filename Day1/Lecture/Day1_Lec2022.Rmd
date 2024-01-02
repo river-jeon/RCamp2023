@@ -379,8 +379,8 @@ unfamiliar operators, functions, pacakges, etc. You can also use the shortcut
 "?" symbol to do the same.
 
 ```{r}
-help("%*%")
-?mean
+help("%*%") # special characters 
+?mean # alphanumeric
 help("+")
 
 ```
@@ -440,12 +440,15 @@ encountered an atomic vector from making the die that contains numbers one
 through six. You can make an atomic vector by grouping some values of data
 together with c():
 ```{r}
-die <- 1:6 # "integer"
-die <- c(1, 2, 3, 4, 5, 6) # "double"
+die1 <- 1:6 # "integer"
+die1
+
+die <- c(1, 2, 3, 4, 5, 6) # "double" 
 die
 
 # is.vector tests whether an object is an atomic vector.
 # It returns TRUE if the object is an atomic vector and FALSE otherwise.
+is.vector(die1)
 is.vector(die)
 ```
 
@@ -464,7 +467,8 @@ Each atomic vector stores its values as a one-dimensional vector, and each
 atomic vector can only store one type of data. You can save different types of
 data in R by using different types of atomic vectors. Altogether, R recognizes
 six basic types of atomic vectors: doubles, integers, characters, logicals,
-complex, and raw.
+complex (i.e., complex numbers, e.g., imaginary), and raw (i.e., raw bytes, e.g.,
+dealing with binary numbers directly).
 
 To create your card deck, you will need to use different types of atomic vectors
 to save different types of information (text and numbers). You can do this by
@@ -495,10 +499,16 @@ die
 ```
 
 ```{r eval = FALSE}
+# Error in sum(text) : invalid 'type' (character) of argument
 sum(text)
 sum("ace")
-# Error in sum(text) : invalid 'type' (character) of argument
-charToRaw("10")
+
+# 31 == ASCII: 49 (hexadecimal: 31)
+# 0 == ASCII: 48 (hexadecimal: 30)
+charToRaw("10") 
+
+# raw_data <- charToRaw("Hello")
+# raw_data
 ```
 
 ### 4.1.1 Doubles
@@ -510,8 +520,11 @@ general, R will save any number that you type in R as a double by default.
 0.5
 die <- c(1, 2, 3, 4, 5, 6)
 # typeof() tells us what type of object an object is
-typeof(die)
+typeof(die) # "double" (double-precision floating-point numbers)
+
 # NOT the same as die <- 1:6
+die1 <- 1:6 # typeof(die1) == "integer"
+die1
 ```
 
 Some R functions refer to doubles as “numerics”. Double is a computer science
@@ -547,8 +560,17 @@ Logical vectors store TRUEs and FALSEs, R’s form of Boolean data. Logicals are
 very helpful for doing things like comparisons:
 ```{r}
 3 > 4
-sqrt(2)^2 - 2  == 0
+
 # Be careful of floating-point error due to R's limitation on storing doubles.
+sqrt(2)^2 - 2  == 0
+
+# # check tolerance
+# tolerance <- 1e-10
+# abs(sqrt(2)^2 - 2) < tolerance
+
+# as.integer(3.9) # round down
+# round(3.9) # round 
+# all.equal(sqrt(2)^2, 2)
 ```
 
 Any time you type TRUE or FALSE in capital letters (without quotation marks), R
@@ -557,12 +579,17 @@ for TRUE and FALSE, unless they are defined elsewhere (e.g. T <- 500). Since the
 meaning of T and F can change, its best to stick with TRUE and FALSE. It is also
 good practice to not name your variables T or F if possible.
 ```{r}
-F = FALSE
+F
+FALSE # Do Not do: False, T = FALSE
+
 logic <- c(TRUE, FALSE, TRUE)
 logic
 typeof(logic)
 typeof(FALSE)
 typeof(TRUE)
+
+# as.logical(0) # 0 converts to TRUE
+# as.logical(10) # other number converts to FALSE
 ```
 
 
@@ -608,6 +635,7 @@ names(die) <- c("one", "two", "three", "four", "five", "six")
 # Now die has a names attribute
 attributes(die)
 die
+# View(die)
 ```
 
 To remove the names attribute, set it to NULL:
@@ -615,6 +643,7 @@ To remove the names attribute, set it to NULL:
 names(die) <- NULL
 names(die)
 die
+# View(die)
 ```
 
 
@@ -634,8 +663,9 @@ To do this, set the dim attribute to a numeric vector of length n. R will
 reorganize the elements of the vector into n dimensions. Each dimension will
 have as many rows or columns as the nth value of the dim vector. For example,
 you can reorganize die into a 2 × 3 matrix (which has 2 rows and 3 columns):
+
 ```{r}
-dim(die) <-c(2, 3)
+dim(die) <-c(2, 3) # values by default added column-wise
 die
 ```
 
@@ -666,7 +696,7 @@ m
 matrix will fill up the matrix column by column by default, but you can fill the
 matrix row by row if you include the argument byrow = TRUE:
 ```{r}
-m <- matrix(die, nrow = 2, byrow = TRUE)
+m <- matrix(die, nrow = 2, byrow = TRUE) 
 m
 ```
 
@@ -772,7 +802,10 @@ To do this, use the list function. list() creates a list the same way c()
 creates a vector. Separate each element in the list with a comma:
 ```{r}
 list1 <- list(100:130, "R", list(TRUE, FALSE))
-list1
+list1[[3]][1]
+
+# list1[[1]]
+# list1[[2]][2] # NA
 ```
 
 The double-bracketed indices tell you which element of the list is being
@@ -846,6 +879,7 @@ df <- data.frame(HappyFace = c("ace", "two", "six"),
                  Value = c(1, 2, 3))
 df
 # View(df)
+df
 ```
 
 You’ll need to make sure that each vector is the same length (or can be made so
