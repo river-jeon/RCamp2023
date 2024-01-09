@@ -365,6 +365,7 @@ happened to have the same name as the objects you are loading:
 saveRDS(a, file = "stuff.RDS") # saving a to RDS file 
 d <- readRDS("stuff.RDS")
 # readRDS("stuff.RDS")
+
 ```
 
 Saving your data as an R file offers some advantages over saving your
@@ -499,7 +500,7 @@ value(s) more than once in your “subset.” This code will return the
 first row of school_loc twice:
 
 ```{r}
-school_loc[c(1,1), c(1,2,3)]
+school_loc[c(1,1), c(1,2,2,3)]
 ```
 
 R’s notation system is not limited to data frames. "You can use the same
@@ -602,9 +603,9 @@ data frame:
 
 ```{r eval=FALSE}
 # This extracts the first row 
-school_loc[1,]
+school_loc[1, ]
 # This extracts the first column  
-school_loc[,1, drop=F]
+school_loc[ ,1, drop=F]
 ```
 
 ### 3.1.5 Logical values
@@ -626,7 +627,8 @@ dim(school_loc) # [1] 7012   26
 
 num_cols <- ncol(school_loc) # 26
 head(school_loc)
-school_loc[1, c(TRUE, FALSE, TRUE, rep(FALSE, num_cols - 3))]
+school_loc[1, c(TRUE, FALSE, TRUE, rep(FALSE, 23))]
+View(school_loc)
 
 ```
 
@@ -719,6 +721,7 @@ l
 l[[1]] # access by index
 l$numbers 
 
+l[1]
 # typeof(l[1]) # list
 # typeof(l$numbers) # double
 ```
@@ -799,7 +802,7 @@ a real example:
 ```{r}
 vec <- c(1:10)
 vec
-vec <- c(10:20)
+vec <- "text"
 vec
 ```
 
@@ -986,6 +989,7 @@ school_loc$Y[school_loc$X < -100]
 
 # What does this do?
 school_loc$Y[school_loc$X < -100] <- 0
+View(school_loc)
 
 ```
 
@@ -1056,6 +1060,8 @@ c <- c(1, 2, 4)
 a == b
 b == c
 a == b & b == c
+all(a == b & b == c)
+any(a == b & b == c)
 # (TRUE TRUE TRUE) & (TRUE  TRUE FALSE)
 ```
 
@@ -1203,8 +1209,10 @@ You can also remove all observations containing NA's in any column by
 using the na.omit() function. For example,
 
 ```{r eval=FALSE}
+dim(school_loc)
 summary(school_loc) # 7012 obs.
 new_df <- na.omit(school_loc)
+dim(new_df)
 summary(new_df) # 5470 obs
 ```
 
