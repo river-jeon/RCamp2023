@@ -2,18 +2,35 @@
 title: "Day 1 Lecture"
 author: "Cecilia Sui"
 date: "`r format(Sys.time(), '%m/%d/%y')`"
-output: pdf_document
+output:
+  html_document:
+    df_print: paged
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+
+# Rmd: R Markdown 
+- magic book where you can write words, add pictures, and do math to tell a story with data.
+  - R Markdown is a file format that combines markdown (a lightweight markup language for creating formatted text) with embedded R code chunks. 
+  - It has a .Rmd extension. 
+  - main purpose of R Markdown is to create dynamic documents, reports, presentations, and even websites. It allows for the integration of R code with narrative text, images, and other elements.
+  - Interactivity: R Markdown documents are processed through the knitr package in R, which runs the embedded R code and inserts results (like plots, tables, and computed values) directly into the document. 
+  - R Markdown supports the creation of well-structured, publication-quality documents, including PDFs, HTML pages, and slideshows. 
+  - It's ideal for data analysis reports, presentations, and scientific papers where you need to combine statistics, graphs, and text. 
+
 # Day 1 Outline:
 1. Why should we learn R?
 2. Installation
 3. The Basics 
 4. R Objects 
+- Operations 
+- Basic datatype
+- Vector 
+
+
 
 Please find the most updated materials here:
 [https://github.com/river-jeon/RCamp2023](https://github.com/river-jeon/RCamp2023)
@@ -41,20 +58,20 @@ Please find the most updated materials here:
 ## 2.1 Installing R
 
 <p>
-![The R Project for Statistical Computing](/Users/river/Documents/GitHub/RCamp2023/Day1/Lecture/pics/Install1.png){width=70%}
+![The R Project for Statistical Computing](./pics/Install1.png){width=70%}
 </p>
 
 <p>
-![CRAN Mirrors](/Users/river/Documents/GitHub/RCamp2023/Day1/Lecture/pics/Install2.png){width=70%}
+![CRAN Mirrors](./pics/Install2.png){width=70%}
 </p>
 <p>
-![Choose your OS](/Users/river/Documents/GitHub/RCamp2023/Day1/Lecture/pics/Install3.png){width=70%}
+![Choose your OS](./pics/Install3.png){width=70%}
 </p>
 <p>
-![macOS download](/Users/river/Documents/GitHub/RCamp2023/Day1/Lecture/pics/Install4.png){width=70%}
+![macOS download](./pics/Install4.png){width=70%}
 </p>
 <p>
-![Windows download](/Users/river/Documents/GitHub/RCamp2023/Day1/Lecture/pics/Install5.png){width=70%}
+![Windows download](./pics/Install5.png){width=70%}
 </p>
 
 Just follow the standard installation instructions and you should be good!
@@ -78,8 +95,20 @@ R Studio makes using R a lot easier!
 ![Choose the one for your OS](/Users/river/Documents/GitHub/RCamp2023/Day1/Lecture/pics/Install8.png){width=70%}
 </p>
 <p>
-![R Studio Overview](/Users/river/Documents/GitHub/RCamp2023/Day1/Lecture/pics/RStudio.png){width=70%}
+![R Studio Overview](./pics/RStudio.png){width=70%}
 </p>
+
+
+R offers a help() function that you can use when you encounter
+unfamiliar operators, functions, pacakges, etc. You can also use the shortcut
+"?" symbol to do the same.
+
+```{r}
+help("%*%") # special characters 
+?mean # alphanumeric
+help("+")
+
+```
 
 
 ## \textcolor{red}{In-class exercises 1.1:}
@@ -100,15 +129,14 @@ section will teach you everything you need to know to get started.
 R is a programming language that you can use to communicate with your computer,
 and RStudio is an integrated development environment (IDE) designed for R. 
 
-The RStudio interface is simple. You type R code into the bottom line of the
+The RStudio interface is simple. "You type R code into the bottom line of the
 RStudio console pane and then hit Enter to run it. The code you type is called
 a command, because it will command your computer to do something for you. The
-line you type it into is called the command line.
+line you type it into is called the command line."
 
 When you type a command at the prompt and hit Enter, your computer executes the
 command and shows you the results. Then RStudio displays a fresh prompt for your
 next command. For example, if you type 1 + 1 and hit Enter, RStudio will display:
-
 ```{r}
 1 + 1
 ```
@@ -128,7 +156,7 @@ with the 20th value.
 You can mostly ignore the numbers that appear in brackets:
 
 ```{r}
-# The colon operator (:) returns every integer between two integers.
+# The "colon operator (:)" returns every integer between two integers.
 # It is an easy way to create a sequence of numbers.
 100:130
 ```
@@ -140,6 +168,7 @@ If you type an incomplete command and press Enter, R will display a + prompt,
 which means R is waiting for you to type the rest of your command. Either finish
 the command or hit Escape to start over:
 
+# console example (ctrl + c)
 ```{r eval=F}
 > 5 -
 +
@@ -147,7 +176,7 @@ the command or hit Escape to start over:
 [1] 4
 ```
 
-If you type a command that R doesn’t recognize, R will return an error message.
+"If you type a command that R doesn’t recognize, R will return an error message."
 If you ever see an error message, don’t panic. R is just telling you that your
 computer couldn’t understand or do what you asked it to do. You can then try a
 different command at the next prompt:
@@ -161,19 +190,19 @@ Error: unexpected input in "3 % 5"
 ```
 
 Once you get the hang of the command line, you can easily do anything in R that
-you would do with a calculator. For example, you could do some basic arithmetic:
+you would do with a calculator. For example, you could do some basic "arithmetic":
 
 ```{r}
-2 * 3
-4 - 1
-6 / (4 - 1)
+2 * 3 # asterisk
+4 - 1 # subtraction
+6 / 4 # slash
 
-2 ^ 3
+2 ^ 3 # caret 
 2 ** 3
-'^'(2,3)
+# '^'(2,3)
 
 3 + 3 * 20
-(3+3) *20
+(3+3) * 20
 ```
 
 R follows the order of operations, where precedence follows the BEDMAS order:
@@ -192,9 +221,12 @@ Subtraction -.
 ### This is still a comment.
 ### Comment again. #######
 
+
 # line 1
 # line 2
+
 ```
+
 3. Multiple Comments: Block + 
   - On Windows and Linux, Ctrl + Shift + C.
   - On macOS, Cmd + Shift + C.
@@ -210,12 +242,15 @@ should end up with the same number that you started with:
 2. Multiply the result by 3.
 3. Subtract 6 from the answer.
 4. Divide what you get by 3.
-```{r}
-37 + 2
-39 * 3
-117 - 6
-111 /3
 
+```{r}
+3 + 2
+5 * 3
+15 - 6
+9 / 3
+
+6 %% 4 # modulus
+6 %/% 4 # quotient
 ```
 
 
@@ -243,12 +278,13 @@ into an object like a or b. Wherever R encounters the object, it will replace it
 with the data saved inside, like so:
 
 ```{r}
-a <- 1 # assignment statement <- or =
+a <- 1 # assignment statement <- or =  
 a
 a + 2
+a <- a + 2
 a
 b = a + 2
-a
+b
 ```
 
 To create an R object, choose a name and then use the less-than symbol, <,
@@ -279,14 +315,14 @@ vaR = 100
 ```
 
 
-Finally, R will overwrite any previous information stored in an object without
+"Finally, R will overwrite any previous information stored in an object without
 asking you for permission. So, it is a good idea to not use names that are
-already taken. The same goes for functions.
+already taken." The same goes for functions.
 ```{r}
 my_number0 <- 1
 my_number0
-my_number1 <- 999
-my_number1
+my_number0 <- "text"
+my_number0
 ```
 
 You can see which object names you have already used with the function ls().
@@ -296,7 +332,7 @@ ls()
 You can also see which names you have used by examining RStudio’s environment
 pane.
 
-Let's create a vector called die that contains the numbers one through six. 
+"Let's create a vector called die that contains the numbers one through six."
 ```{r}
 die <- 1:6
 die = 1:6
@@ -306,8 +342,12 @@ DIE <- 5:8
 DIE
 Die <- 10:15
 Die
+die
 die - 1
+die
 die / 2
+die
+die
 die * die
 ```
 
@@ -322,7 +362,7 @@ die - 1
 ```
 
 
-When you use two or more vectors in an operation, R will line up the vectors and
+"When you use two or more vectors in an operation," R will line up the vectors and
 perform a sequence of individual operations. For example, when you run die *
 die, R lines up the two die vectors and then multiplies the first element of
 vector 1 by the first element of vector 2. R then multiplies the second element
@@ -332,31 +372,31 @@ first two.
 
 ```{r}
 die = 1:6
+die
 die - 1
 die * (die-1)
 ```
 
 
-If you give R two vectors of unequal lengths, R will repeat the shorter vector
-until it is as long as the longer vector, and then do the math. This isn’t a
+"If you give R two vectors of unequal lengths, R will repeat the shorter vector
+until it is as long as the longer vector, and then do the math." This isn’t a
 permanent change, and the shorter vector will be its original size after R does
 the math. If the length of the short vector does not divide evenly into the
 length of the long vector, R will return a warning message. This behavior is
 known as vector recycling, and it helps R do element-wise operations:
 
 ```{r}
+ex <- rep(0, 6)
+
+
 1:2
+ex
+ex + 1:2
 
+ex
 1:4
-
-die
-
-die + 1:2
-
-
-die + 1:4
+ex + 1:4
 ```
-
 
 **Element-wise operations ** are a very useful feature in R because they
 manipulate groups of values in an orderly way. When you start working with data
@@ -364,26 +404,18 @@ sets, element-wise operations will ensure that values from one observation are
 only paired with values from the same observation. Element-wise operations also
 make it easier to write your own programs and functions in R.
 
-But don’t think that R has given up on traditional matrix multiplication. You
+But don’t think that R has given up on traditional "matrix multiplication". You
 just have to ask for it when you want it. For example, you can do inner
 multiplication with the %*% operator:
 
 ```{r}
-die %*% die
+die %*% die 
 ```
 
-You can also do things like transpose a matrix with t() and take its determinant
-with det(). Don’t worry if you’re not familiar with these operations. They are
-easy to look up. R offers a help() function that you can use when you encounter
-unfamiliar operators, functions, pacakges, etc. You can also use the shortcut
-"?" symbol to do the same.
+"You can also do things like transpose a matrix with t() and take its determinant
+with det()." Don’t worry if you’re not familiar with these operations. They are
+easy to look up.
 
-```{r}
-help("%*%") # special characters 
-?mean # alphanumeric
-help("+")
-
-```
 
 ## \textcolor{red}{In-class exercises 1.3:}
 
@@ -402,13 +434,13 @@ help("+")
 
 # 4. R Objects
 
-In this section, we will learn about different R objects by using it to assemble
+"In this section, we will learn about different R objects by using it to assemble
 a deck of 52 playing cards.
 
 We will start by building simple R objects that represent playing cards and then
 work our way up to a full-blown table of data. In short, we will build the
 equivalent of an Excel spreadsheet from scratch. When we are finished, our deck
-of cards will look something like this:
+of cards will look something like this:"
 
 ```{r eval=F}
  face   suit value
@@ -439,21 +471,22 @@ An atomic vector is just a simple vector of data. In fact, you have already
 encountered an atomic vector from making the die that contains numbers one
 through six. You can make an atomic vector by grouping some values of data
 together with c():
+"An atomic vector in R is like a train with cars in a line, where each car holds one piece of information, like a number or a word. You can make an atomic vector by putting together different pieces of data with `c()`. For example, if you put the numbers 1, 2, 3, 4, 5, 6 into `c()`, you get a train of numbers, which is an atomic vector"
 ```{r}
-die1 <- 1:6 # "integer"
-die1
+# die1 <- 1:6 # "integer"
+# die1
 
-die <- c(1, 2, 3, 4, 5, 6) # "double" 
+die <- c(1, 2, 3, 4, 5, 6) # "double" (real number)
 die
 
 # is.vector tests whether an object is an atomic vector.
 # It returns TRUE if the object is an atomic vector and FALSE otherwise.
-is.vector(die1)
+# is.vector(die1)
 is.vector(die)
 ```
 
-You can also make an atomic vector with just one value. R saves single values as
-an atomic vector of length 1:
+"You can also make an atomic vector with just one value. R saves single values as
+an atomic vector of length 1":
 ```{r}
 five <- 5
 five
@@ -463,21 +496,21 @@ length(five) # 1
 length(die)
 ```
 
-Each atomic vector stores its values as a one-dimensional vector, and each
+"Each atomic vector stores its values as a one-dimensional vector, and each
 atomic vector can only store one type of data. You can save different types of
 data in R by using different types of atomic vectors. Altogether, R recognizes
 six basic types of atomic vectors: doubles, integers, characters, logicals,
 complex (i.e., complex numbers, e.g., imaginary), and raw (i.e., raw bytes, e.g.,
-dealing with binary numbers directly).
+dealing with binary numbers directly)."
 
 To create your card deck, you will need to use different types of atomic vectors
-to save different types of information (text and numbers). You can do this by
+to save "different types of information (text and numbers)". You can do this by
 using some simple conventions when you enter your data. For example, you can
 create a character vector by surrounding your input in quotation marks:
 
 ```{r}
 num <- 13 # double by default.
-text <- "ace"
+text <- "ace" 
 ```
 
 Each type of atomic vector has its own convention (described below). R will
@@ -485,33 +518,36 @@ recognize the convention and use it to create an atomic vector of the
 appropriate type. If you’d like to make atomic vectors that have more than one
 element in them, you can combine an element with the c() function from Packages
 and Help Pages. Use the same convention with each element:
+
 ```{r}
 text <- c("ace", "hearts")
+text
 num <- c(1,2,3,4,5,6,10)
+num
 ```
 
 You may wonder why R uses multiple types of vectors. Vector types help R behave
-as you would expect. For example, R will do math with atomic vectors that
-contain numbers, but not with atomic vectors that contain character strings:
+as you would expect. For example, "R will do math with atomic vectors that
+contain numbers, but not with atomic vectors that contain character strings":
 ```{r}
-sum(die)
 die
+sum(die)
 ```
 
 ```{r eval = FALSE}
 # Error in sum(text) : invalid 'type' (character) of argument
+text
 sum(text)
-sum("ace")
 
 # 31 == ASCII: 49 (hexadecimal: 31)
 # 0 == ASCII: 48 (hexadecimal: 30)
-charToRaw("10") 
+# charToRaw("10") 
 
 # raw_data <- charToRaw("Hello")
 # raw_data
 ```
 
-### 4.1.1 Doubles
+### 4.1.1 Doubles (real numbers)
 A double vector stores regular numbers. The numbers can be positive or negative,
 large or small, and have digits to the right of the decimal place or not. In
 general, R will save any number that you type in R as a double by default.
@@ -523,8 +559,8 @@ die <- c(1, 2, 3, 4, 5, 6)
 typeof(die) # "double" (double-precision floating-point numbers)
 
 # NOT the same as die <- 1:6
-die1 <- 1:6 # typeof(die1) == "integer"
-die1
+# die1 <- 1:6 # typeof(die1) == "integer"
+# die1
 ```
 
 Some R functions refer to doubles as “numerics”. Double is a computer science
@@ -538,7 +574,7 @@ vector in R by typing a character or string of characters surrounded by quotes:
 text <- c("Joe",  "Biden")
 text
 typeof(text)
-typeof("Biden")
+# typeof("Biden")
 # The maximum value (also used as default) that can be set is 65535. Strings
 # longer than that will be truncated. Which means you will rarely run out of
 # space to store character strings.
@@ -562,7 +598,9 @@ very helpful for doing things like comparisons:
 3 > 4
 
 # Be careful of floating-point error due to R's limitation on storing doubles.
-sqrt(2)^2 - 2  == 0
+# cannot store infinite length of decimal points, approximation
+sqrt(2)^2 - 2 == 0
+sqrt(2)^2 - 2
 
 # # check tolerance
 # tolerance <- 1e-10
@@ -573,20 +611,21 @@ sqrt(2)^2 - 2  == 0
 # all.equal(sqrt(2)^2, 2)
 ```
 
-Any time you type TRUE or FALSE in capital letters (without quotation marks), R
+"Any time you type TRUE or FALSE in capital letters (without quotation marks), R
 will treat your input as logical data. R also assumes that T and F are shorthand
-for TRUE and FALSE, unless they are defined elsewhere (e.g. T <- 500). Since the
+for TRUE and FALSE, unless they are defined elsewhere (e.g. T <- 500)." Since the
 meaning of T and F can change, its best to stick with TRUE and FALSE. It is also
 good practice to not name your variables T or F if possible.
 ```{r}
 F
+T
 FALSE # Do Not do: False, T = FALSE
 
 logic <- c(TRUE, FALSE, TRUE)
 logic
 typeof(logic)
-typeof(FALSE)
-typeof(TRUE)
+# typeof(FALSE)
+# typeof(TRUE)
 
 # as.logical(0) # 0 converts to TRUE
 # as.logical(10) # other number converts to FALSE
@@ -595,20 +634,18 @@ typeof(TRUE)
 
 ## 4.2 Attributes 
 
-An attribute is a piece of information that you can attach to an atomic vector
+"An attribute is a piece of information that you can attach to an atomic vector
 or any R object. The attribute won’t affect any of the values in the object, and
 it will not appear when you display your object. You can think of an attribute
 as “metadata”; it is just a convenient place to put information associated with
 an object. R will normally ignore this metadata, but some R functions will check
 for specific attributes. These functions may use the attributes to do special
-things with the data.
+things with the data."
 
 You can see which attributes an object has with attributes. attributes() will
 return NULL if an object has no attributes. An atomic vector, like die, won’t
 have any attributes unless you give it some:
 ```{r}
-a <- 1
-a
 die <- 1:6
 attributes(die)
 # R uses NULL to represent the null set, an empty object.
@@ -635,7 +672,7 @@ names(die) <- c("one", "two", "three", "four", "five", "six")
 # Now die has a names attribute
 attributes(die)
 die
-# View(die)
+View(die)
 ```
 
 To remove the names attribute, set it to NULL:
@@ -643,7 +680,7 @@ To remove the names attribute, set it to NULL:
 names(die) <- NULL
 names(die)
 die
-# View(die)
+View(die)
 ```
 
 
@@ -656,8 +693,8 @@ length(die)
 
 ```
 
-You can transform an atomic vector into an n-dimensional array by giving it a
-dimensions attribute with dim.
+"You can transform an atomic vector into an n-dimensional array by giving it a
+dimensions attribute with dim."
 
 To do this, set the dim attribute to a numeric vector of length n. R will
 reorganize the elements of the vector into n dimensions. Each dimension will
@@ -665,8 +702,8 @@ have as many rows or columns as the nth value of the dim vector. For example,
 you can reorganize die into a 2 × 3 matrix (which has 2 rows and 3 columns):
 
 ```{r}
-dim(die) <-c(2, 3) # values by default added column-wise
-die
+dim(die) <- c(2, 3) # values by default added column-wise
+die # 1, 2, 3, 4, 5, 6
 ```
 
 R will always use the first value in dim for the number of rows and the second
@@ -725,18 +762,18 @@ dim(A)
 B <- matrix(c(1,4,-2,1,2,1),3,2)
 A
 B
-A + B
 A - B
+A + B
 ```
 ### 4.3.4 Matrix Multiplication
 ```{r}
 C <- matrix(c(2,-2,1,2,3,1),2,3)
-A
-C
+A #  3 2
+C # 2 3
 dim(C)
 dim(A)
-C %*% A
-A %*% C
+C %*% A 
+A %*% C 
 ```
 
 
@@ -802,15 +839,16 @@ To do this, use the list function. list() creates a list the same way c()
 creates a vector. Separate each element in the list with a comma:
 ```{r}
 list1 <- list(100:130, "R", list(TRUE, FALSE))
-list1[[3]][1]
+list1
+list1[[3]][2]
 
 # list1[[1]]
 # list1[[2]][2] # NA
 ```
 
-The double-bracketed indices tell you which element of the list is being
+"The double-bracketed indices tell you which element of the list is being
 displayed. The single-bracket indices tell you which sub-element of an element
-is being displayed.
+is being displayed."
 
 For example, [[1]] [1] 100 is the first subelement of the first element in the
 list. [[2]] [1] "R" is the first sub-element of the second element in the list.
@@ -855,15 +893,14 @@ factor() functions, by taking a vector as input. We will talk more about factors
 on Day 4.
 
 
-
 ## 4.6 Data Frames 
 
-Data frames are the two-dimensional version of a list. They are far and away the
-most useful storage structure for data analysis, and they provide an ideal way
+"Data frames are the two-dimensional version of a list." They are far and away the
+most useful storage structure for "data analysis", and they provide an ideal way
 to store an entire deck of cards. You can think of a data frame as R’s
 equivalent to the Excel spreadsheet because it stores data in a similar format.
 
-Data frames group vectors together into a two-dimensional table. Each vector
+Data frames group vectors together into a "two-dimensional table". Each vector
 becomes a column in the table. As a result, each column of a data frame can
 contain a different type of data; but within a column, every cell must be the
 same type of data.
@@ -878,13 +915,12 @@ df <- data.frame(HappyFace = c("ace", "two", "six"),
                  Suit = c("clubs", "clubs", "clubs"),
                  Value = c(1, 2, 3))
 df
-# View(df)
-df
+View(df)
 ```
 
-You’ll need to make sure that each vector is the same length (or can be made so
+"You’ll need to make sure that each vector is the same length (or can be made so
 with R’s recycling rules) as data frames cannot combine columns of different
-lengths.
+lengths."
 
 In the previous code, I named the arguments in data.frame face, suit, and value,
 but you can name the arguments whatever you like. data.frame will use your
@@ -896,7 +932,7 @@ objects are grouped together by a list (or data frame) with the str function:
 ```{r}
 typeof(df)
 class(df)
-str(df)
+str(df) #structure
 # ?str
 ```
 You could create this data frame with data.frame, but look at the typing
@@ -921,7 +957,7 @@ deck <- data.frame(
     7, 6, 5, 4, 3, 2, 1, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 13, 12, 11,
     10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
 )
-# View(deck)
+View(deck)
 ## You can run View(deck) to invoke the data viewer in R.
 ```
 
