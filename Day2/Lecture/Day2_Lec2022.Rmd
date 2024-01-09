@@ -42,7 +42,7 @@ knit_hooks$set(output = function(x, options) {
 
 # 1. Tips on Writing Code
 
-By default, RStudio will save your current “workspace” when you quit.
+By default, RStudio will save your current workspace when you quit.
 While convenient, this can mean that you make one-off changes to your
 data and forget to save that command in your script. Starting with a
 fresh session every time you open RStudio means you’ll learn to keep
@@ -65,12 +65,12 @@ for one additional analysis, etc. which happens very often.)
 
 ### 1.1.1 Formatting Tips
 
-You can improve the readability of your code a lot by following a few
+"You can improve the readability of your code a lot by following a few
 simple rules:
 
 -   Put spaces between and around variable names and operators (=+-\*/)
 -   Break up long lines of code
--   Use meaningful variable names composed of 2 or 3 words (avoid
+-   Use meaningful variable names composed of 2 or 3 words" (avoid
     abbreviations unless they’re very common and you use them very
     consistently)
 
@@ -110,7 +110,7 @@ runs.
 Comments that explain why something was done are great:
 
 ```{r eval=F}
-# Need to reverse code the score for question 3
+# reverse the score for question 3
 data$DepressionQ3 = 4 - data$DepressionQ3
 ```
 
@@ -148,7 +148,7 @@ have created to save all your work.
 
 ### 1.2.1 Get the working directory
 
-Each time you open R, it links itself to a directory on your computer,
+"Each time you open R, it links itself to a directory on your computer,
 which R calls the working directory. This is where R will look for files
 when you attempt to load them, and it is where R will save files when
 you save them. The location of your working directory will vary on
@@ -200,7 +200,7 @@ directory or specifies a path. Another way is to go to Session > Set Working Dir
 
 ```{r eval=FALSE}
 # This creates a new directory inside the current directory at path = /Users/river/Documents/GitHub/RCamp2023/Day2/Lecture
-# dir.create("./pset2")
+dir.create("./pset2")
 ```
 
 ## \textcolor{red}{In-class exercises 2.1:}
@@ -243,6 +243,7 @@ If there are NAs in your dataframe, it also tells you how many NAs there
 are in each column.
 
 ```{r}
+str(iris)
 summary(iris)
 ```
 
@@ -288,9 +289,9 @@ appear in your browser window.
 
 ### 2.2.3 R Files
 
-R provides two file formats of its own for storing data, .RDS and
+"R provides two file formats of its own for storing data, .RDS and
 .RData. RDS files can store a single R object, and RData files can store
-multiple R objects.
+multiple R objects."
 
 You can open a RDS file with readRDS. For example, if the royal flush
 data was saved as poker.RDS, you could open it with:
@@ -362,7 +363,8 @@ happened to have the same name as the objects you are loading:
 
 ```{r eval = FALSE}
 saveRDS(a, file = "stuff.RDS") # saving a to RDS file 
-a <- readRDS("stuff.RDS")
+d <- readRDS("stuff.RDS")
+# readRDS("stuff.RDS")
 ```
 
 Saving your data as an R file offers some advantages over saving your
@@ -429,16 +431,25 @@ R has a notation system that lets you extract values from R objects. To
 extract a value or set of values from a data frame, write the data
 frame’s name followed by a pair of hard brackets:
 
+"Between the brackets will go two indices separated by a comma. The
+indices tell R which values to return. R will use the first index to
+subset the rows of the data frame and the second index to subset the
+columns."
+
 ```{r eval=F}
+View(school_loc)
 school_loc[ , ]
+
+str(school_loc)
+summary(school_loc)
+
+head(school_loc)
+# tail(school_loc)
+
 # typeof(school_loc)
 # class(school_loc)
 ```
 
-Between the brackets will go two indices separated by a comma. The
-indices tell R which values to return. R will use the first index to
-subset the rows of the data frame and the second index to subset the
-columns.
 
 You have a choice when it comes to writing indices. There are six
 different ways to write an index for R, and each does something slightly
@@ -458,8 +469,6 @@ integers in the mathematical sense. They can be saved as numerics in R
 
 ```{r}
 head(school_loc)
-tail(school_loc)
-# View(school_loc)
 school_loc[1,2]
 ```
 
@@ -493,8 +502,8 @@ first row of school_loc twice:
 school_loc[c(1,1), c(1,2,3)]
 ```
 
-R’s notation system is not limited to data frames. You can use the same
-syntax to select values in any R object, as long as you supply one index
+R’s notation system is not limited to data frames. "You can use the same
+syntax to select values in any R object," as long as you supply one index
 for each dimension of the object. So, for example, you can subset a
 vector (which has one dimension) with a single index:
 
@@ -509,6 +518,7 @@ data frame:
 
 ```{r}
 school_loc[1:2,1:2]
+
 ```
 
 However, if you select a single column, R will return a vector:
@@ -517,8 +527,8 @@ However, if you select a single column, R will return a vector:
 school_loc[1:2, 1]
 ```
 
-If you would prefer a data frame instead, you can add the optional
-argument drop = FALSE between the brackets. This method also works for
+"If you would prefer a data frame instead, you can add the optional
+argument drop = FALSE between the brackets." This method also works for
 selecting a single column from a matrix or an array.
 
 ```{r}
@@ -565,7 +575,7 @@ school_loc[-1, 1, drop=F]
 What would happen if you used zero as an index? Zero is neither a
 positive integer nor a negative integer, but R will still use it to do a
 type of subsetting. R will return nothing from a dimension when you use
-zero as an index. This creates an empty object:
+zero as an index. This "creates an empty object":
 
 ```{r}
 # data frame with 0 columns and 0 rows
@@ -594,7 +604,7 @@ data frame:
 # This extracts the first row 
 school_loc[1,]
 # This extracts the first column  
-school_loc[,1]
+school_loc[,1, drop=F]
 ```
 
 ### 3.1.5 Logical values
@@ -614,7 +624,7 @@ subset:
 dim(school_loc) # [1] 7012   26
 # You can use the multiplication symbol here as a shortcut to the FALSEs. 
 
-# num_cols <- ncol(school_loc) # 26
+num_cols <- ncol(school_loc) # 26
 head(school_loc)
 school_loc[1, c(TRUE, FALSE, TRUE, rep(FALSE, num_cols - 3))]
 
@@ -703,12 +713,14 @@ element. For example:
 
 ```{r}
 l <- list(numbers = c(1, 2), logical = TRUE, strings = c("a", "b", "c"))
-# l
+l
 
 # And then subset it:
-l[1] # access by index
-typeof(l[1]) # list
-typeof(l$numbers) # double
+l[[1]] # access by index
+l$numbers 
+
+# typeof(l[1]) # list
+# typeof(l$numbers) # double
 ```
 
 The result is a smaller list with one element. That element is the
@@ -717,7 +729,7 @@ work with lists. For example, sum(l[1]) will return an error. It would
 be horrible if once you stored a vector in a list, you could only ever
 get it back as a list:
 
-```{r eval=FALSE}
+```{r eval=FALSE n}
 sum(l[1])
 # Error in sum(l[1]) : invalid 'type' (list) of argument
 ```
@@ -751,6 +763,7 @@ notation, R will return just the values that were inside an element of
 the list. You can combine this feature with any of R’s indexing methods:
 
 ```{r}
+l 
 l["numbers"]
 typeof(l["numbers"])
 
@@ -799,6 +812,7 @@ vec[1]
 And here is how you can modify it:
 
 ```{r}
+vec
 vec[1] <- 999
 vec
 vec[-1] <- 0
@@ -809,6 +823,7 @@ You can replace multiple values at once as long as the number of new
 values equals the number of selected values:
 
 ```{r}
+vec
 vec[c(1, 3, 5)] <- c(1000, 3000, 5000)
 vec
 
@@ -850,6 +865,7 @@ by assigning them the symbol NULL:
 school_loc$newcol <- 0
 View(school_loc)
 school_loc$newcol <- NULL
+colnames(school_loc)
 ```
 
 You can single out just the values by subsetting the columns dimension.
@@ -884,12 +900,12 @@ assignment operator.
 Do you remember R’s logical index system, logicals? To recap, you can
 select values with a vector of TRUEs and FALSEs. The vector must be the
 same length as the dimension that you wish to subset. R will return
-every element that matches a TRUE:
+every element that matches a TRUE: 
 
 ```{r}
 vec2 <- c(1,0,2,0,3,4,5,0,9) 
 vec2
-vec2[c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE)]
+vec2[c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE)] # filter
 ```
 
 At first glance, this system might seem impractical. Who wants to type
@@ -902,7 +918,7 @@ A logical test is a comparison like “is one less than two?”, 1 \< 2, or
 “is three greater than four?”, 3 \> 4. R provides seven logical
 operators that you can use to make comparisons.
 
-![R’s Logical Operators](/Users/ysui/Desktop/R_Camp/Day2/logicals.png)
+![R’s Logical Operators](./logicals.png)
 
 Each operator returns a TRUE or a FALSE. If you use an operator to
 compare vectors, R will do 'element-wise comparisons' — just like it does
@@ -965,6 +981,8 @@ sum(school_loc$X < -100)
 
 # What does this do? 
 school_loc$Y[school_loc$X < -100]
+# uses the logical vector to index or subset the Y column. 
+# extract all values from the Y column where the corresponding values in the X column are TRUE(less than -100)
 
 # What does this do?
 school_loc$Y[school_loc$X < -100] <- 0
@@ -1017,11 +1035,11 @@ nrow(TFR[TFR$TFR > 8,])
 
 ### 4.2.2 Boolean Operators
 
-Boolean operators are things like and (&) and or (\|). They collapse the
-results of multiple logical tests into a single TRUE or FALSE. R has six
+Boolean operators are things like and (&) and or (\|). They "collapse the
+results of multiple logical tests into a single TRUE or FALSE". R has six
 boolean operators.
 
-![Boolean Operators](/Users/ysui/Desktop/R_Camp/Day2/booleans.png)
+![Boolean Operators](./booleans.png)
 
 To use a Boolean operator, place it between two complete logical tests.
 R will execute each logical test and then use the Boolean operator to

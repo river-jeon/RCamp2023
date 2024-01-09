@@ -39,12 +39,15 @@ knit_hooks$set(output = function(x, options) {
 
 
 # 1. Functions
+"Function is a set of instructions that performs a specific task, typically taking
+input (known as arguments), processing these inputs, and returning an output."
+Arguments is a value that you pass to a function when you call it. The function then uses this value as input to perform its operations. Think of it like giving ingredients to a chef; the ingredients (arguments) are what the chef (function) needs to make a meal (perform a task or calculation). 
 R comes with many functions that you can use to do sophisticated tasks like
 random sampling. For example, you can round a number with the **round()**
 function, or calculate its factorial with the **factorial()** function. Using a
 function is pretty simple: just write the name of the function and then the data
 you want the function to operate on in parentheses. In fact, you have been using
-functions in Day 2's problem set, including sum(), mean(), max() when analyzing
+functions in Day 2's problem set, including "sum(), mean(), max()" when analyzing
 the dataframes.  
 
 ```{r}
@@ -64,8 +67,8 @@ die
 mean(1:6)
 mean(die)
 round(mean(die))
-ceiling(mean(die))
-floor(mean(die))
+ceiling(mean(die)) # rounds up
+floor(mean(die)) # rounds down
 ceiling(4.000001)
 floor(3.99999999)
 ```
@@ -84,8 +87,9 @@ sample() will return the elements sampled from the vector. The return value is
 convert it to a list.
 ```{r}
 sample(x = 1:4, size = 2)
+# sample(x = 1:4, size = 2, replace = TRUE)
 die <- 1:6
-sample(x = die, size = 3)
+sample(x = die, size = 3) # can input object
 
 # Be careful with the scope of variables here.
 # x is a local variable, NOT a global variable.
@@ -109,8 +113,8 @@ use the name of the first argument in a function. So you might see the previous
 code written as:
 
 ```{r}
-sample(die, size = 3)
-sample(x = die, size = 3)
+?sample
+sample(x = die, size = 3) # best practice 
 # or equivalently
 sample(die, 3)
 ```
@@ -118,11 +122,13 @@ sample(die, 3)
 Often, the name of the first argument is not very descriptive, and it is usually
 obvious what the first piece of data refers to anyways.
 
-But how do you know which argument names to use? If you try to use a name that a
-function does not expect, you will likely get an error:
+"But how do you know which argument names to use? If you try to use a name that a
+function does not expect, you will likely get an error:"
 ```{r eval=FALSE}
 round(3.1415926535, numbers = 3)
 # Error in round(3.1415, numbers = 3) : unused argument (numbers = 3)
+?round
+round(x = 3.1415926535, digits = 3)
 ```
 
 If you are not sure which names to use with a function, you can look up the
@@ -148,7 +154,7 @@ default value if you do not.
 For example, round() will round your number to 0 digits past the decimal point
 by default. To override the default, you can always specify your own argument
 value. For example,
-```{r}
+```{r n}
 round(3.1415)
 round(3.1415, digits = 2)
 ```
@@ -165,18 +171,17 @@ After using R for a while, you might notice that it is often for R users to skip
 the names for the first one or two arguments, and only write out the names for
 the rest of arguments.
 
-If you do not write out the names of your arguments, R will match your values to
-the arguments in your function by order. You can learn about the correct order
+"If you do not write out the names of your arguments, R will match your values to
+the arguments in your function by order." You can learn about the correct order
 by **running the args() function, hovering over the function call, or using the
 help pages **.
 
-For example, in the following code, the first value, die, will be matched to the
+"For example, in the following code, the first value, die, will be matched to the
 first argument of sample, which is named **x**. The next value, 1, will be
-matched to the next argument, **size**:
+matched to the next argument, **size**":
 ```{r}
+?sample
 sample(die, 1)
-args(sample)
-sample(die, 2)
 ```
 
 As you provide more arguments, it becomes more likely that your order and R’s
@@ -187,12 +192,8 @@ argument name, no matter where it appears in the order of arguments.
 For example, if we reverse the order of arguments in the function call above, it
 is still equivalent.
 ```{r}
-sample(size = 3, x = die) # notice the order is reversed here
-sample(1:3, 2:6)
-sample(x = 3, size = 2)
-args(sample)
-?sample
-sample(5)
+sample(size = 3, x = die) # reversed order, specify argument name
+sample(10)
 ```
 
 
@@ -221,10 +222,10 @@ As a result, sample() may select the same value on the second draw. Each value
 has a chance of being selected each time. It is as if every draw were the first
 draw.
 
-Sampling with replacement is an easy way to create independent random samples.
+"Sampling with replacement is an easy way to create independent random samples.
 Each value in your sample will be a sample of size one that is independent of
 the other values. For example, this would be how we simulate a pair of fair
-dice:
+dice":
 ```{r}
 die
 sample(x = die, size = 2, replace = TRUE)
@@ -239,7 +240,7 @@ function:
 ```{r}
 dice <- sample(die, size = 2, replace = TRUE)
 dice
-sum(dice)
+# sum(dice)
 ```
 
 What would happen if you call dice multiple times? Would R generate a new pair
