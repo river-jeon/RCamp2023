@@ -73,6 +73,13 @@ ceiling(4.000001)
 floor(3.99999999)
 ```
 
+```{r eval=FALSE}
+round(3.1415926535, numbers = 3)
+# Error in round(3.1415, numbers = 3) : unused argument (numbers = 3)
+?round
+round(x = 3.1415926535, digits = 3)
+```
+
 
 
 ## 1.1 Sampling using the sample() function 
@@ -124,12 +131,6 @@ obvious what the first piece of data refers to anyways.
 
 "But how do you know which argument names to use? If you try to use a name that a
 function does not expect, you will likely get an error:"
-```{r eval=FALSE}
-round(3.1415926535, numbers = 3)
-# Error in round(3.1415, numbers = 3) : unused argument (numbers = 3)
-?round
-round(x = 3.1415926535, digits = 3)
-```
 
 If you are not sure which names to use with a function, you can look up the
 function’s arguments with **args()**. To do this, simply plug in the name of the
@@ -222,11 +223,11 @@ As a result, sample() may select the same value on the second draw. Each value
 has a chance of being selected each time. It is as if every draw were the first
 draw.
 
-"Sampling with replacement is an easy way to create independent random samples.
+"Sampling with replacement is an easy way to create independent random samples."
 Each value in your sample will be a sample of size one that is independent of
 the other values. For example, this would be how we simulate a pair of fair
-dice":
-```{r}
+dice:
+```{r n}
 die
 sample(x = die, size = 2, replace = TRUE)
 ```
@@ -238,7 +239,7 @@ You now have a method for simulating the result of rolling a pair of dice. If
 you want to add up the dice, you can feed your result straight into the sum()
 function:
 ```{r}
-dice <- sample(die, size = 2, replace = TRUE)
+dice <- sample(die, size = 2, replace = F)
 dice
 # sum(dice)
 ```
@@ -343,9 +344,9 @@ an R object, which you can do with the function **function()**. To do this, call
 function() and follow it with a pair of braces, \{\}:
 
 ```{r}
-my_function <- function() {
+my_function <- function( ) {
   ### the body of the function
-  return() # the return value(s)
+  return( ) # the return value(s)
 }
 ```
 
@@ -357,13 +358,12 @@ For example, you can turn your dice code into a function by running:
 ```{r}
 roll <- function() {
   die <- 1:6
-  dice <- sample(die,
-    size = 2,
-    replace = TRUE
-  )
+  dice <- sample(die, size = 2, replace = TRUE)
   s <- sum(dice)
   return(s) # return value
 }
+
+roll()
 ```
 
 Notice that I indented each line of code between the braces here. The
@@ -415,14 +415,14 @@ line, or would it not?
 
 Here’s some code that would display a result:
 
-```{r eval = FALSE}
+```{r eval = FALSE n}
 dice
 1 + 1
 sqrt(2)
 ```
 
 And here’s some code that would not:
-```{r eval=FALSE}
+```{r eval=FALSE n}
 dice <- sample(die, size = 2, replace = TRUE)
 two <- 1 + 1
 a <- sqrt(2)
@@ -438,81 +438,77 @@ anything.
 ### 1.2.2 Arguments
 
 What if we removed one line of code from our function and changed the name die
-to rcamp, like this?
-```{r eval = FALSE}
+to custom_die, like this?
+```{r eval = FALSE n}
 roll2 <- function() {
-  dice <- sample(rcamp, size = 2, replace = TRUE)
+  dice <- sample(custom_die, size = 2, replace = TRUE)
   sum(dice)
 }
 ```
 
 Now we will get an error when we run the function. The function needs the object
-rcamp to do its job, but there is no object named rcamp to be found in the
+custom_die to do its job, but there is no object named custom_die to be found in the
 environment:
-```{r eval = FALSE}
+```{r eval = FALSE n}
 roll2()
-# Error in sample(rcamp, size = 2, replace = TRUE) :
-# object 'rcamp' not found
+# Error in sample(custom_die, size = 2, replace = TRUE) :
+# object 'custom_die' not found
 ```
 
-You can provide rcamp when you call roll2 if you make rcamp an argument of the
-function. To do this, put the name rcamp in the parentheses that follow function
-when you define roll2:
+You can provide custom_die when you call roll2 if you make custom_die an argument of the function. To do this, put the name custom_die in the parentheses that follow function when you define roll2:
 
+"Say you want to make a different sided die"
 ```{r}
-roll2 <- function(rcamp) {
-  dice <- sample(rcamp, size = 2, replace = TRUE)
-  sum(dice)
+roll2 <- function(custom_die) {
+  dice <- sample(custom_die, size = 2, replace = TRUE)
+  return(sum(dice))
 }
 ```
 
-Now roll2 will work as long as you provide rcamp when you call the function
+Now roll2 will work as long as you provide custom_die when you call the function
 roll2(). You can take advantage of this to roll different types of dice each
 time you call roll2.
 
 Remember, we’re rolling pairs of dice that have different number of sides:
 ```{r}
-roll2(rcamp = 1:4) # 4-sided
-
-roll2(rcamp = 1:6) # 6-sided
-roll2(rcamp = 1:20) # 20-sided
+roll2(custom_die = 1:4) # 4-sided
+roll2(custom_die = 1:6) # 6-sided
+roll2(custom_die = 1:20) # 20-sided
 roll2(1:20) # without the argument name, it works the same
 ```
 
 Notice that roll2 will still give an error if you do not specify a value for the
-rcamp argument when you call roll2.
+custom_die argument when you call roll2.
 ```{r eval = FALSE}
 roll2()
 # Error in sample(bones, size = 2, replace = TRUE) :
-#  argument "rcamp" is missing, with no default
+#  argument "custom_die" is missing, with no default
 ```
 
-As mentioned in the Error Message, we can fix the error by giving the rcamp
-argument a default value. To do this, set rcamp equal to a value when you define
-roll2:
+As mentioned in the Error Message, we can fix the error by giving the custom_die
+argument a default value. To do this, set custom_die equal to a value when you define
+
 ```{r}
-roll2 <- function(rcamp = 1:6) {
-  dice <- sample(rcamp, size = 2, replace = TRUE)
-  sum(dice)
+roll2 <- function(custom_die = 1:6) {
+  dice <- sample(custom_die, size = 2, replace = TRUE)
+  return(sum(dice))
 }
 ```
 
-Now you can provide a new value for rcamp if you like. If you do not provide any
-value for the rcamp argument, roll2() will use the default value that we defined
-above.
+Now you can provide a new value for custom_die if you like. If you do not provide any value for the custom_die argument, roll2() will use the default value that we defined above.
 
 ```{r}
-roll2() # using rcamp = 1:6
-roll2(2:10) # using rcamp = 2:10
+roll2() # using custom_die = 1:6
+roll2(c(1, 2, 2, 4, 4, 5)) # mario party custom_die
 ```
 
 Again, **return()** is not strictly needed in R. R will return the last value
 you calculate in the function by default, but **return()** makes it clearer.
 
-```{r}
-roll3 <- function(bones = 1:6) {
-  dice <- sample(bones, size = 2, replace = TRUE)
-  return(sum(dice)) # It is equivalent to just writing sum(dice)
+```{r n}
+roll3 <- function(custom_die = 1:6) {
+  dice <- sample(custom_die, size = 2, replace = TRUE)
+  sum(dice) # It is equivalent to just writing sum(dice)
 }
 
 roll3()
@@ -521,9 +517,10 @@ roll3()
 In R, the **return()** function can return only **one single object**. If we
 want to return multiple values in R, we can use a list (or other objects) that
 stores multiple values and return it as a single object.
+
 ```{r}
-roll4 <- function(bones = 1:6) {
-  dice <- sample(bones, size = 2, replace = TRUE)
+roll4 <- function(custom_die = 1:6) {
+  dice <- sample(custom_die, size = 2, replace = TRUE)
   l <- list(sum(dice), dice)
   return(l)
 }
@@ -595,7 +592,7 @@ yourself whenever you like.
 
 
 # 2. Control Statements
-
+- imagine "traffic signals for a computer" 
 In order to control the flow of execution of expressions in R, we make use of
 the **control structures**. These control structures are sometimes called loops
 in R. There are eight types of control structures in R (if/if-else, switch, for,
@@ -697,31 +694,28 @@ to FALSE, it runs the code within the **else** statement.
 
 For example:
 ```{r}
-a <- 100
-b <- 88
+a <- 88
+b <- 100
+
 if (a > b) {
   print("a is greater than b")
+} else {
+  print("b is greater than a")
 }
-#
-# else{
-#   print("b is greater than a")
-# }
 ```
 
 We can use the **else if** statement to select between multiple options. For
 example:
 ```{r}
-a <- 10
-b <- 5
+a <- 100
+b <- 88
 if (a < b) {
   print("a is smaller than b")
 } else if (a == b) {
   print("a is equal to b")
-} else if (a > b) {
+} else { # a > b
   print("a is greater than b")
-} else {
-  print("haha")
-}
+} 
 ```
 
 There is also an $ifelse()$ function in R. It acts like the **if-else**
@@ -742,6 +736,7 @@ ifelse(condition, exp_if_true, exp_if_false)
   FALSE
 
 ```{r}
+a
 ifelse(a < 7, "a is less than 7", "a is greater than 7")
 ```
 
@@ -750,30 +745,51 @@ We can use the **ifelse()** function to modify values in our dataframe. For
 example, we can create a new column in the dataframe called PopOver100 where its
 value is TRUE if the population is greater than 100 and FALSE otherwise.
 ```{r eval = FALSE}
-df$PopOver100 <- ifelse(df$Population > 100, TRUE, FALSE)
+df$PopMean <- ifelse(df$Population > mean(df$Population), TRUE, FALSE)
+# df$PopMean2 <- df$Population > mean(df$Population)
+View(df)
 ```
 
 You might remember Q17 and Q18 from Day2's problem set. You can solve them using
 this **ifelse()** function.
 
-```{r eval = F}
+```{r eval = F n}
 # Q17.
+resources <- read.csv("resources.csv")
+
+resources$oil[is.na(resources$oil)] = mean(resources$oil, na.rm = TRUE) 
+resources$logGDPcp[is.na(resources$logGDPcp)] = mean(resources$logGDPcp, na.rm = TRUE) 
+resources$regime[is.na(resources$regime)] = mean(resources$regime, na.rm = TRUE) 
+resources$metal[is.na(resources$metal)] = mean(resources$metal, na.rm = TRUE) 
+resources$illit[is.na(resources$illit)] = mean(resources$illit, na.rm = TRUE) 
+resources$life[is.na(resources$life)] = mean(resources$life, na.rm = TRUE) 
+summary(resources)
+
+colnames(resources)[7] <- "life_expectancy"
+
+# categorical variables: represents categories or group
+# examples: Colors: Red, Blue, Green. Sizes: Small, Medium, Large. Types of Animals: Dogs, Cats, Birds. 
+
+# as.factor create levels.
+# without as.factor, "low" will be stored as character, with as factor "low" will be stored as vector of integer values with a corresponding set of character label, therefore treated as categorical variable. unordered factors by default.
+
 resources$life <- as.factor(ifelse(resources$life_expectancy < 50, "low",
   ifelse(resources$life_expectancy < 70, "medium",
     ifelse(resources$life_expectancy < 100, "high")
   )
 ))
 
+View(resources)
 # Q18.
-resources$democracy <- ifelse(resources$regime >= 0, 1, 0)
+# resources$democracy <- ifelse(resources$regime >= 0, 1, 0)
 ```
 
 
 
 ## 2.3 $for$ Loop in R 
 
-The **for** loop in R, repeats through sequences to perform repeated tasks. They
-work with an iterable variable to go through a sequence. The following code is
+"The **for** loop in R, repeats through sequences to perform repeated tasks. They
+work with an iterable variable to go through a sequence." The following code is
 the syntax of **for** loops in R:
 
 ```{r eval = FALSE}
@@ -790,9 +806,9 @@ for (variable in sequence) {
 
 Here is an example: 
 ```{r}
-vec <- c(1:11)
+vec <- c(2, 7)
 vec
-vec2 <- c(10:20)
+vec2 <- c(10:17)
 vec2
 for (i in vec) {
   print(vec2[i])
@@ -804,8 +820,10 @@ With the **for** loops, we can now iterate through the entire dataframe.
 
 For example, if you want to list all the years: 
 ```{r}
+dim(df)
 n1 <- dim(df)[1]
-n2 <- dim(df)[2]
+n1
+# n2 <- dim(df)[2]
 for (i in 1:n1) {
   print(df$Year[i])
 }
@@ -835,7 +853,7 @@ df$ratio <- NA
 Now we want to recode the ratio variable, where we divide Employed over the sum
 of Unemployed and Employed.
 ```{r}
-# l <- dim(df)[1]
+# L <- dim(df)[1]
 for (i in 1:L) {
   df$ratio[i] <- df$Employed[i] / (df$Unemployed[i] + df$Employed[i])
 }
