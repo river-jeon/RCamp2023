@@ -74,7 +74,7 @@ floor(3.99999999)
 ```
 
 ```{r eval=FALSE}
-round(3.1415926535, numbers = 3)
+round(3.1415926535, numbers = 1)
 # Error in round(3.1415, numbers = 3) : unused argument (numbers = 3)
 ?round
 round(x = 3.1415926535, digits = 3)
@@ -239,7 +239,7 @@ You now have a method for simulating the result of rolling a pair of dice. If
 you want to add up the dice, you can feed your result straight into the sum()
 function:
 ```{r}
-dice <- sample(die, size = 2, replace = F)
+dice <- sample(die, size = 2, replace = T)
 dice
 # sum(dice)
 ```
@@ -474,7 +474,7 @@ Remember, we’re rolling pairs of dice that have different number of sides:
 roll2(custom_die = 1:4) # 4-sided
 roll2(custom_die = 1:6) # 6-sided
 roll2(custom_die = 1:20) # 20-sided
-roll2(1:20) # without the argument name, it works the same
+roll2(c(1, 2, 3, 4, 4, 6)) # without the argument name, it works the same
 ```
 
 Notice that roll2 will still give an error if you do not specify a value for the
@@ -778,6 +778,7 @@ resources$life <- as.factor(ifelse(resources$life_expectancy < 50, "low",
     ifelse(resources$life_expectancy < 100, "high")
   )
 ))
+View(resources)
 
 View(resources)
 # Q18.
@@ -824,7 +825,7 @@ dim(df)
 n1 <- dim(df)[1]
 n1
 # n2 <- dim(df)[2]
-for (i in 1:n1) {
+for (i in 1:16) {
   print(df$Year[i])
 }
 ```
@@ -853,10 +854,11 @@ df$ratio <- NA
 Now we want to recode the ratio variable, where we divide Employed over the sum
 of Unemployed and Employed.
 ```{r}
-# L <- dim(df)[1]
+# L <- dim(df)[1] # 16
 for (i in 1:L) {
   df$ratio[i] <- df$Employed[i] / (df$Unemployed[i] + df$Employed[i])
 }
+View(df)
 ```
 
 There is also a shortcut to get the ratio column.

@@ -36,36 +36,36 @@ knit_hooks$set(output = function(x, options) {
 3. Descriptive Statistics
 
 # 1. Types of Statistical Data in R
-The most common variables used in data analysis can be classified as one of
+"The most common variables used in data analysis can be classified as one of
 three types of variables: numerical, categorical/nominal and ordinal data.
 
 Understanding the differences in these types of variables is critical, since the
 variable type will determine which statistical analysis will be valid for that
-data. In addition, the way we summarize data with statistics and plots will be
+data." In addition, the way we summarize data with statistics and plots will be
 determined by the variable type.
 
 ## 1.1 Numerical Data 
 
-Numerical data are usually from interval or ratio variables that are measured or
+"Numerical data are usually from interval or ratio variables that are measured or
 counted values, such as age, height, weight, number of votes. The interval
 between numbers is known to be equal.
 
 Numerical data can be either discrete or continuous. Counted data are usually
-discrete, while measured data are usually continuous.
+discrete, while measured data are usually continuous."
 
 ## 1.2 Categorical Data 
 
 Categorical or nominal variables are data whose levels are labels or
 descriptions, and which cannot be ordered. Examples of categorical variables are
-sex, school, and yes/no questions.They are also called “nominal categorical” or
+"sex, school, and yes/no" questions.They are also called "“nominal categorical” or
 “qualitative” variables, and the levels of a variable are sometimes called
-“classes” or “groups”.
+“classes” or “groups”."
 
-The levels of categorical variables cannot be ordered. For the variable sex, it
+"The levels of categorical variables cannot be ordered. For the variable sex, it
 makes no sense to try to put the levels “female”, “male”, and “other” in any
 numerical order. If levels are numbered for convenience, the numbers are
 arbitrary, and the variable can’t be treated as a numeric variable. Moreover,
-taking the average of such numbers is often not meaningful.
+taking the average of such numbers is often not meaningful."
 
 ## 1.3 Ordinal Data 
 
