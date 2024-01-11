@@ -934,6 +934,7 @@ for (i in vec) {
   print(vec[i])
 }
 
+
 vec <- c(1:10)
 i <- 1
 while (i <= length(vec)) {

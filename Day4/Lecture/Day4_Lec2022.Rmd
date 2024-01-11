@@ -32,7 +32,7 @@ knit_hooks$set(output = function(x, options) {
 
 # Day 4 Outline:
 1. Types of Statistical Data (numerical, categorical, ordinal)
-2. Probability distributions: rnorm / dnorm / pnorm / qnorm
+2. Probability distributions:  dnorm / pnorm / qnorm / rnorm
 3. Descriptive Statistics
 
 # 1. Types of Statistical Data in R
@@ -44,7 +44,7 @@ variable type will determine which statistical analysis will be valid for that
 data." In addition, the way we summarize data with statistics and plots will be
 determined by the variable type.
 
-## 1.1 Numerical Data 
+## 1.1 Numerical Data (Continuous and Discrete)
 
 "Numerical data are usually from interval or ratio variables that are measured or
 counted values, such as age, height, weight, number of votes. The interval
@@ -53,12 +53,13 @@ between numbers is known to be equal.
 Numerical data can be either discrete or continuous. Counted data are usually
 discrete, while measured data are usually continuous."
 
-## 1.2 Categorical Data 
+## 1.2 Categorical Data (Unordered Categorical, Nominal)
 
 Categorical or nominal variables are data whose levels are labels or
-descriptions, and which cannot be ordered. Examples of categorical variables are
-"sex, school, and yes/no" questions.They are also called "“nominal categorical” or
-“qualitative” variables, and the levels of a variable are sometimes called
+descriptions, and which cannot be ordered. "Examples of categorical variables are
+"sex, school, and yes/no" questions." 
+
+They are also called "“nominal categorical” or “qualitative” variables, and the levels of a variable are sometimes called
 “classes” or “groups”."
 
 "The levels of categorical variables cannot be ordered. For the variable sex, it
@@ -67,25 +68,25 @@ numerical order. If levels are numbered for convenience, the numbers are
 arbitrary, and the variable can’t be treated as a numeric variable. Moreover,
 taking the average of such numbers is often not meaningful."
 
-## 1.3 Ordinal Data 
+## 1.3 Ordinal Data (Ordered Categorical)
 
-Ordinal variables can be ordered, or ranked in logical order, but the interval
+"Ordinal variables can be ordered, or ranked in logical order, but the interval
 between levels of the variables are not necessarily known. Subjective
 measurements are often ordinal variables. One example would be having people
-rank four items by preference in order from one to four. A different example
+rank four items by preference in order from one to four." A different example
 would be having people assess several items based on a Likert ranking scale: "On
 a scale of one to five, do you agree or disagree with this statement?" A third
-example is level of education for adults, considering for example "less than
+example is "level of education" for adults, considering for example "less than
 high school", "high school", "associate's degree," etc.
 
-Critically, in each case we can order the responses, but we cannot know if the
+Critically, in each case we can "order the responses, but we cannot know if the
 interval between the levels is equal. For example, the distance between your
 favorite salad dressing and your second favorite salad dressing may be small,
-where there may be a large gap between your second and third choices.
+where there may be a large gap between your second and third choices."
 
 We can logically assign numbers to levels of an ordinal variable, and can treat
-them in order, but should NOT treat them as numeric: "strongly agree" and
-"neutral" may not average out to an "agree."
+them in order, "but should NOT treat them as numeric: "strongly agree" and
+"neutral" may not average out to an "agree.""
 
 For the purpose of the bootcamp,we will consider such Likert item data to be
 ordinal data under most circumstances. Ordinal data is sometimes called “ordered
@@ -96,7 +97,7 @@ categorical”.
 Unfortunately, R does not use the terms numerical, categorical, and ordinal for
 types of variables.
 
-Numerical variables can be coded as variables with numeric or integer classes.
+"Numerical variables can be coded as variables with numeric or integer classes."
 The default class to store numbers in R is numeric. An L used with values to
 tell R to store the data as an integer class.
 ```{r}
@@ -123,6 +124,7 @@ Colors <- c("Red", "Green", "Blue")
 class(Colors)
 
 Colors.f <- factor(c("Red", "Green", "Blue"))
+typeof(TFR.f) # assign integer to the unique value 
 class(Colors.f)
 ```
 
@@ -156,8 +158,8 @@ order of the levels allows us to compare levels:
 
 ```{r}
 TFR.f <- factor(c("low", "high", "medium", "high", "low", "medium", "high"))
-typeof(TFR.f)
-class(TFR.f)
+# typeof(TFR.f)
+# class(TFR.f)
 TFR.f
 levels(TFR.f)
 
@@ -194,7 +196,7 @@ treat them as factors. We can convert them to factors like this:
 
 ```{r tidy = TRUE}
 school_loc <- read.csv("school_loc.csv")
-# summary(school_loc)
+summary(school_loc)
 str(school_loc)
 # From the output, we can see that R stores the states as characters.
 school_loc$STATE <- factor(school_loc$STATE)
@@ -202,8 +204,8 @@ school_loc$STATE <- factor(school_loc$STATE)
 str(school_loc)
 # View(school_loc)
 levels(school_loc$STATE)
-school_loc$STATE
-# summary(school_loc)
+# school_loc$STATE
+summary(school_loc)
 ```
 
 Notice the **summary()** function handles factors differently to numbers (and
@@ -238,15 +240,21 @@ The four normal distribution functions are:
 * rnorm: random sampling from the normal distribution
 
 ## 2.1 dnorm 
+
+"x is the value(s) for which you want to find the probability density."
+"output of dnorm(x) is the value of the probability density function (PDF) of the normal distribution at the points specified by x." (likelihood)
+"dnorm(x) tells you the "height" of the normal distribution curve at that point."
+
 ```{r}
 ?dnorm
 dnorm(0:10, mean = 0, sd = 1, log = FALSE)
 ```
 
+
 Using the density, it is possible to determine the probabilities of events. 
 
-For example, you may wonder: What is the likelihood that a person has an IQ of
-exactly 140?. In this case, you would need to retrieve the density of the IQ
+For example, you may wonder: "What is the likelihood that a person has an IQ of
+exactly 140?." In this case, you would need to retrieve the density of the IQ
 distribution at value 140. The IQ distribution can be modeled with a mean of 100
 and a standard deviation of 15. The corresponding density is:
 
@@ -260,13 +268,17 @@ iq.dist <- dnorm(sample.range, mean = iq.mean, sd = iq.sd)
 iq.df <- data.frame("IQ" = sample.range, "Density" = iq.dist)
 View(iq.df)
 plot(iq.df)
+
+# plot(iq.df$IQ, iq.df$Density , type = "l", main = "Density of Normal Distribution", xlab = "IQ", ylab = "Density")
+
 ```
 From these data, we can now answer the initial question as well as additional
 questions. Let's write a function that returns a percentage value when given a
 density.
 ```{r}
+# print percentage value when given density
 pp <- function(x) {
-  print(paste0(round(x * 100, 3), "%"))
+  print(paste0(round(x * 100, 3), "%")) # concatenate
 }
 
 # ?paste0
@@ -283,10 +295,11 @@ pp(sum(iq.df$Density[iq.df$IQ <= 90]))
 # What does this code do?
 pp(sum(iq.df$Density[iq.df$IQ <= 100]) + sum(iq.df$Density[iq.df$IQ > 100]))
 ```
+"riemann sum"
 
 ## 2.2 pnorm 
-The cumulative density (CDF) function is a monotonically increasing function as
-it integrates over densities. To get an intuition of the CDF, let’s create a
+"The cumulative density (CDF) function is a monotonically increasing function as
+it integrates over densities." To get an intuition of the CDF, let’s create a
 plot for the IQ data:
 ```{r}
 cdf <- pnorm(sample.range, iq.mean, iq.sd)
@@ -296,6 +309,11 @@ iq.df <- cbind(iq.df, "CDF_LowerTail" = cdf)
 # Can you explain what this code above is doing?
 View(iq.df)
 
+# visual aid of pdf
+plot(50:150, dnorm(50:150, 100, 15), type = 'l')
+abline(v = 80, col = 'red')
+
+# visual aid of cdf
 library(ggplot2)
 ggplot(iq.df, aes(x = IQ, y = CDF_LowerTail)) +
   geom_point()
@@ -311,15 +329,26 @@ manner.
 # notice here we using == signs
 pp(iq.df$CDF_LowerTail[iq.df$IQ == 140])
 
-# likelihood of 50 < IQ <= 90?
-pp(iq.df$CDF_LowerTail[iq.df$IQ == 90])
+# likelihood of IQ <= 90?
+pp(iq.df$CDF_LowerTail[iq.df$IQ ==  90])
+
+plot(50:150, dnorm(50:150, 100, 15), type = 'l')
+abline(v = 80, col = 'red')
 
 # set lower.tail to FALSE to obtain P[X >= x]
+# upper.tail from the sample range
 cdf <- pnorm(sample.range, iq.mean, iq.sd, lower.tail = FALSE)
 iq.df <- cbind(iq.df, "CDF_UpperTail" = cdf)
 View(iq.df)
 # Probability for IQ >= 140? same value as before using dnorm!
 pp(iq.df$CDF_UpperTail[iq.df$IQ == 140])
+pp(iq.df$CDF_LowerTail[iq.df$IQ == 140])
+
+iq.df$CDF_LowerTail[iq.df$IQ == 140] + iq.df$CDF_UpperTail[iq.df$IQ == 140] 
+
+plot(50:150, dnorm(50:150, 100, 15), type = 'l')
+points(140, dnorm(140, 100, 15), col = 'red')
+
 ```
 
 Note that the results from pnorm are the same as those obtained from manually
@@ -328,8 +357,8 @@ summing up the probabilities obtained via dnorm. Moreover, by setting
 which measure how the likelihood of an observation that is at least as extreme
 as the obtained one.
 
-It is important to remember that **pnorm** does NOT provide the PDF but the
-**CDF**.
+"It is important to remember that **pnorm** does NOT provide the PDF but the
+**CDF**."
 
 ## 2.3 qnorm 
 The quantile function is simply the inverse of the cumulative density function
@@ -340,9 +369,10 @@ Let’s take a look at the quantile function for $P[X<=x]$:
 ```{r}
 # input to qnorm is a vector of probabilities
 prob.range <- seq(0, 1, 0.001)
-# prob.range
+prob.range
 # ?seq
 
+# inverse cdf
 icdf.df <- data.frame("Probability" = prob.range, "IQ" = qnorm(prob.range, iq.mean, iq.sd))
 View(icdf.df)
 ggplot(icdf.df, aes(x = Probability, y = IQ)) +
@@ -392,6 +422,7 @@ obs
 ## Don't worry if the code below does not totally make sense so far.
 # law of large numbers: mean will approach expected value for large N
 n.samples <- c(100, 1000, 10000)
+
 my.df <- do.call(rbind, lapply(
   n.samples,
   function(x) {
@@ -401,6 +432,9 @@ my.df <- do.call(rbind, lapply(
     )
   }
 ))
+
+# do.call is just like python * (the function(x) returns list and do.call removes the list since rbind only need the df as an element not dfs in the list)
+
 # show one facet per random sample of a given size
 ggplot() +
   geom_histogram(data = my.df, aes(x = IQ)) +
@@ -510,6 +544,7 @@ dimnames(school_loc)[2]
 * var(x, na.rm = FALSE) – Shows the variance.
 
 * mad(x, na.rm = FALSE) – Shows the median absolute deviation.
+This first finds the median of the data set, then computes the absolute differences between each data point and the median, and finally takes the median of these absolute differences.
 * log(dataset) – Shows log value for each element.
 * summary(dataset) – We have seen how it shows a summary of dataset like maximum
   value, minimum value, mean, etc.
@@ -530,6 +565,8 @@ You might want to access elements from the summary statistics sometimes. We will
 use the built-in dataset longley again to show some examples.
 ```{r}
 df <- longley
+View(longley)
+summary(df)
 s <- summary(df)
 s
 # You can simply use indices to access each element like this:
@@ -542,7 +579,7 @@ objects would become more useful. For example, we can fit a linear model using
 the lm() function where the independent variable is population and the dependent
 variable is the number of unemployed.
 ```{r}
-lm <- lm(Unemployed ~ Population, data = df)
+lm <- lm(Unemployed ~ Population, data = df) # regressing Unemp on Pop
 lm
 ```
 
