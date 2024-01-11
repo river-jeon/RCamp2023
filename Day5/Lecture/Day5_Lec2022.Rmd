@@ -40,11 +40,11 @@ knit_hooks$set(output = function(x, options) {
 
 # 1. Packages and Help Pages 
 
-You are not the only person writing your own functions with R. Many professors,
+You are not the only person writing your own functions with R. "Many professors,
 programmers, and statisticians use R to design tools that can help people
-analyze data. They then make these tools free for anyone to use. To use these
+analyze data." They then make these tools free for anyone to use. "To use these
 tools, you just have to download them. They come as preassembled collections of
-functions and objects called **packages**.
+functions and objects called **packages**."
 
 ## 1.1 Installing Packages 
 

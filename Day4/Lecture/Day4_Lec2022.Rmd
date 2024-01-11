@@ -124,7 +124,7 @@ Colors <- c("Red", "Green", "Blue")
 class(Colors)
 
 Colors.f <- factor(c("Red", "Green", "Blue"))
-typeof(TFR.f) # assign integer to the unique value 
+typeof(Colors.f) # assign integer to the unique value 
 class(Colors.f)
 ```
 
@@ -265,6 +265,7 @@ iq.sd <- 15
 
 # This returns the density, NOT the values for IQ
 iq.dist <- dnorm(sample.range, mean = iq.mean, sd = iq.sd)
+iq.dist
 iq.df <- data.frame("IQ" = sample.range, "Density" = iq.dist)
 View(iq.df)
 plot(iq.df)
@@ -333,7 +334,7 @@ pp(iq.df$CDF_LowerTail[iq.df$IQ == 140])
 pp(iq.df$CDF_LowerTail[iq.df$IQ ==  90])
 
 plot(50:150, dnorm(50:150, 100, 15), type = 'l')
-abline(v = 80, col = 'red')
+abline(v = 90, col = 'red')
 
 # set lower.tail to FALSE to obtain P[X >= x]
 # upper.tail from the sample range
@@ -521,7 +522,7 @@ colnames(school_loc)
 * dimnames() – Gets row and column names for matrix or data frame objects, that
   is, it is used to see dimensions of the data frame.
 ```{r output.lines=5}
-dimnames(school_loc)[1]
+dimnames(school_loc)[2]
 dim(school_loc)
 ```
 
@@ -552,7 +553,7 @@ This first finds the median of the data set, then computes the absolute differen
   quantiles. You can select other quantiles also.
 ```{r}
 x <- sample(1:100000, 2000)
-quantile(x, probs = seq(0, 1, 0.25), na.rm = FALSE, names = TRUE)
+quantile(x, probs = seq(0, 1, 0.1), na.rm = FALSE, names = TRUE)
 ?quantile
 ```
 
@@ -621,7 +622,7 @@ worldTFR <- read.csv("worldTFR.csv")
 TFR <- na.omit(worldTFR)
 
 # 2.
-ols <- lm(TFR ~ ChildBearing, data = worldTFR)
+ols <- lm(TFR ~ ChildBearing, data = TFR)
 
 # 3.
 ols$coefficients
