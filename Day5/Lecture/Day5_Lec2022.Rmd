@@ -53,7 +53,7 @@ To use an R package, you must first **install** it on your computer and then
 is with the **install.packages()** R function. Open R and type the following
 into the command line:
 
-```{r eval = FALSE tidy = TRUE}
+```{r eval = FALSE}
 install.packages("<package name>")
 ```
 
@@ -221,8 +221,8 @@ The dplyr package makes these steps fast and easy:
 
 * By constraining your options, it helps you think about your data manipulation
   challenges.
-* It provides simple functions that correspond to the most common data
-  manipulation tasks, to help you translate your thoughts into code.
+* "It provides simple functions that correspond to the most common data
+  manipulation tasks, to help you translate your thoughts into code."
 * It uses efficient backends, so you spend less time waiting for the computer.
 
 Here we will introduce you to dplyr's basic set of tools and show you how to
@@ -304,6 +304,7 @@ This function also offers an alternative way to filter NA values. For example:
 worldTFR %>% filter(!is.na(GDPpc))
 # You can also add more conditions here: 
 worldTFR %>% filter(!is.na(GDPpc), TFR > 5)
+
 ```
 
 ## 2.2 Arrange rows with arrange()
@@ -363,7 +364,7 @@ worldTFR.na %>% slice_sample(n = 10)
 
 Use the option **prop** to choose a certain proportion of the cases.
 ```{r output.lines = 3}
-worldTFR.na %>% slice_sample(prop = 0.3)
+worldTFR.na %>% slice_sample(prop = 0.3) # 30% of rows
 ```
 
 Use **replace = TRUE** to perform a bootstrap sample.
@@ -383,7 +384,7 @@ worldTFR %>%
 
 worldTFR %>%
   filter(!is.na(Yschooling)) %>% 
-  slice_max(TFR, n = 3)
+  slice_max(Uncode, n = 3)
 ```
 
 ## 2.4 Select columns with select()
@@ -397,18 +398,23 @@ on a useful subset.
 Select the following three columns: 
 ```{r eval = FALSE}
 worldTFR %>% select("CountryCode", Year, TFR)
+
 ```
 
 Be careful when running the select function after you loaded the "MASS" package.
 The select() function from dplyr will clash with the same select() function from
 MASS, which generates an error like this:
 ```{r eval = F}
-Error in select(., CountryCode, Year, TFR) : unused arguments (CountryCode, Year, TFR) 
+# library(MASS)
+worldTFR %>% select(CountryCode, Year, TFR)
+detach(package:MASS, unload = TRUE) # or go to packages and unselect
+# Error in select(., CountryCode, Year, TFR) : unused arguments (CountryCode, Year, TFR) 
 ```
 
 You can fix this error by using the following code instead. This explicitly
 tells R to use the select() function from the dplyr package.
 ```{r output.lines = 3}
+# library(MASS)
 worldTFR %>% dplyr::select(CountryCode, Year, TFR)
 ```
 
@@ -424,6 +430,9 @@ worldTFR.na %>% select(Year:LifeExpB)
 Select all columns except those from NAME to STATE (inclusive): 
 ```{r output.lines = 3}
 worldTFR.na %>% select(!(Year:LifeExpB))
+worldTFR.na
+worldTFR.na %>% select(!c(Country, Year, TFR)) 
+
 ```
 
 ## 2.5 Add new columns with mutate()
@@ -438,7 +447,7 @@ For example:
 worldTFR.na %>% mutate(ChildBearing_r = round(ChildBearing,0))
 ```
 
-## 2.6 Storing the results to a new dataframe 
+ ## 2.6 Storing the results to a new dataframe 
 
 You can always store your results to a new dataframe.
 
@@ -512,7 +521,9 @@ library(ggplot2)
 
 ```{r}
 data = USArrests # built-in dataset 
-# ?USArrests
+?USArrests
+# View(USArrests)
+
 ggplot(data, aes(x = UrbanPop, y = Assault)) + geom_point()
 # sort of equivalent to doing this with the baseplot 
 plot(data$UrbanPop, data$Assault)
@@ -531,6 +542,8 @@ confidence intervals.
 ggplot(data, aes(x=UrbanPop, y=Assault)) + 
   geom_point() + 
   geom_smooth(method="lm", se = TRUE) 
+
+
 ```
 
 ## 3.2 Adjusting the X and Y Axis Limits
@@ -684,7 +697,7 @@ g2 <- ggplot(df, aes(x = LifeExpB, y = TFR)) +
 
 ```{r}
 dir.create("plots")
-ggsave("g2.png", plot = g2)
+ggsave("TFR.png")
 ```
 
 \newpage
@@ -764,7 +777,7 @@ typing:
 For example,
 
 ```{r eval=FALSE}
-![Pongki Checkout her YouTube Channel: RuPong house](/Users/ysui/Desktop/Prep_Rcamp/Day5/pongki.jpeg){width=80%}
+![Pongki Checkout her YouTube Channel: RuPong house](./pongki.jpeg){width=80%}
 ```
 
-![Pongki Checkout her YouTube Channel: RuPong house](/Users/ysui/Desktop/Prep_Rcamp/Day5/pongki.jpeg){width=80%}
+![Pongki Checkout her YouTube Channel: RuPong house](./pongki.jpeg){width=80%}
