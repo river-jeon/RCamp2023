@@ -22,7 +22,7 @@ We will use the resources dataset to do some exercises with dplyr
 ```{r include=FALSE}
 library(dplyr)
 library(ggplot2)
-df <- read.csv("Day5/Pset/resources.csv")
+df <- read.csv("/Users/river/Documents/GitHub/RCamp2023/Day5/Pset/resources.csv")
 colnames(df)
 ```
 
@@ -40,8 +40,7 @@ test
 df %>% filter(year == 1971, regime >= 0)
 ```
 
-3. Order the rows by Year in descending order. Break ties using the column oil
-   in ascending order.
+3. Order the rows by Year in descending order. Break ties using the column oil in ascending order.
 ```{r, eval=FALSE}
 df %>% arrange(desc(year), oil)
 ```
@@ -54,8 +53,7 @@ df %>% slice(100:110) %>%
 ```
 
 
-5. Randomly select 10 rows with replacement, and standardize the columns oil and
-   metal.
+5. Randomly select 10 rows with replacement, and standardize the columns oil and metal.
 ```{r}
 test <- df %>%
   na.omit() %>% # This way we are only dealing with complete cases
@@ -74,8 +72,7 @@ new_df <- df %>%
   select(cty_name, year, regime, oil, illit, life)
 ```
 
-7. Add a new column named new_oil using where the values are the product of
-   standardized oil and regime type.
+7. Add a new column named new_oil using where the values are the product of standardized oil and regime type.
 ```{r}
 new_df <- new_df %>%
   mutate(new_oil = ((oil - mean(oil, na.rm = TRUE)) / sd(oil, na.rm = TRUE)) * ((regime - mean(regime, na.rm = TRUE)) / sd(regime, na.rm = TRUE)))
@@ -96,8 +93,7 @@ new_df %>%
   summarise(oil = mean(oil, na.rm = TRUE))
 ```
 
-9. Calculate the **median** metal value for **each** regime type from -10 to
-   +10.
+9. Calculate the **median** metal value for **each** regime type from -10 to +10.
 ```{r}
 df %>%
   group_by(regime) %>%
@@ -109,7 +105,7 @@ df %>%
 1. Find all the variables that negatively correlates with TFR from the
    **worldTFR** dataset. Can you offer a reasoning of the relationships?
 ```{r, eval=FALSE}
-tfr <- read.csv("Day5/Pset/worldTFR.csv") %>%
+tfr <- read.csv("/Users/river/Documents/GitHub/RCamp2023/Day5/Lecture/worldTFR.csv") %>%
     na.omit()
 
 # In the lm() function, if you put a . after the ~ the function
@@ -126,7 +122,7 @@ summary(lmTFR)
    TFR should be on the y-axis. Add appropriate labels. Compare the two plots
    and explain the differences.
 ```{r}
-tfr <- read.csv("Day5/Pset/worldTFR.csv") %>%
+tfr <- read.csv("/Users/river/Documents/GitHub/RCamp2023/Day5/Lecture/worldTFR.csv") %>%
   na.omit()
 
 ggplot(tfr, aes(x = LifeExpB, y = TFR)) +
@@ -137,7 +133,7 @@ ggplot(tfr, aes(x = LifeExpB, y = TFR)) +
 ggplot(tfr, aes(x = Pop1564Female, y = TFR)) +
   # geom_smooth(method = "lm") +
   geom_point() +
-  labs(y = "Total Fertility Rate", x = "lol no clue")
+  labs(y = "Total Fertility Rate", x = "Pop1564Female")
 ```
 
 

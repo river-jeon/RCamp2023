@@ -144,6 +144,7 @@ function in the MASS package.
 ```{r}
 help(rlm, package = "MASS")
 help(package="MASS")
+?mean
 ```
 
 Help pages contain useful information about what each function does. These help
@@ -317,6 +318,7 @@ of preceding columns.
 
 ```{r output.lines = 3}
 worldTFR.na <- worldTFR %>% filter(complete.cases(.))
+
 # equivalently to: na.omit(worldTFR)
 summary(worldTFR.na)
 
@@ -347,11 +349,12 @@ It is accompanied by a number of helpers for common use cases.
 Get the first three rows: 
 ```{r output.lines = 3}
 worldTFR.na %>% slice_head(n = 10)
+
 ```
 
 Get the last three rows: 
 ```{r output.lines = 3}
-worldTFR.na %>% slice_tail(n = 10)
+worldTFR.na %>% slice_tail(n = 3)
 ```
 
 ### 2.3.2 slice_sample() randomly selects rows. 
@@ -397,7 +400,7 @@ on a useful subset.
 
 Select the following three columns: 
 ```{r eval = FALSE}
-worldTFR %>% select("CountryCode", Year, TFR)
+worldTFR %>% select(CountryCode, Year, TFR)
 
 ```
 
@@ -405,7 +408,7 @@ Be careful when running the select function after you loaded the "MASS" package.
 The select() function from dplyr will clash with the same select() function from
 MASS, which generates an error like this:
 ```{r eval = F}
-# library(MASS)
+library(MASS)
 worldTFR %>% select(CountryCode, Year, TFR)
 detach(package:MASS, unload = TRUE) # or go to packages and unselect
 # Error in select(., CountryCode, Year, TFR) : unused arguments (CountryCode, Year, TFR) 
@@ -457,14 +460,14 @@ df <- worldTFR %>%
   mutate(ChildBearing_r = round(ChildBearing,0)) %>%
   filter(!is.na(GDPpc), !is.na(Yschooling), TFR > 5) %>%
   select(CountryCode, Year, TFR, GDPpc, Yschooling, ChildBearing_r)
+df
 # View(df)
 ```
 
 Or you can also make these changes **in place** by storing it to your original
 dataframe.
 ```{r eval = F}
-worldTFR <- read.csv("worldTFR.csv")
-df2 <- worldTFR %>% 
+worldTFR <- read.csv("worldTFR.csv") %>% 
   mutate(ChildBearing_r = round(ChildBearing,0)) %>%
   filter(!is.na(GDPpc), !is.na(Yschooling), TFR > 5) %>%
   select(CountryCode, Year, TFR, GDPpc, Yschooling, ChildBearing_r)
@@ -522,7 +525,7 @@ library(ggplot2)
 ```{r}
 data = USArrests # built-in dataset 
 ?USArrests
-# View(USArrests)
+View(USArrests)
 
 ggplot(data, aes(x = UrbanPop, y = Assault)) + geom_point()
 # sort of equivalent to doing this with the baseplot 
@@ -599,7 +602,7 @@ ggplot(data, aes(x=UrbanPop, y=Assault)) +
   labs(title="Urban Population VS Assault", 
          subtitle="Using the built-in dataset USArrests", 
        y="Assault", x="Urban Population") +
-  geom_point(col="pink", size=1) # Set static color and size for points
+  geom_point(col="pink", size=2) # Set static color and size for points
 ```
 
 **ggplot2** is a very powerful package for visualizing your data. 
@@ -673,6 +676,7 @@ ggsave("myplot.pdf", plot = g1)
 1. Omit all NA's from worldTFR.
 ```{r}
 df <- na.omit(worldTFR)
+
 ```
 
 2. Make a plot where the horizontal axis is LifeExpB and vertical axis is TFR.
@@ -687,7 +691,7 @@ ggplot(df, aes(x = LifeExpB, y = TFR)) + geom_point(col = "red", size = 0.5)
 
 4. Add appropriate label for the axis and the plot. 
 ```{r}
-g2 <- ggplot(df, aes(x = LifeExpB, y = TFR)) + 
+ggplot(df, aes(x = LifeExpB, y = TFR)) + 
   geom_point(col = "red", size = 0.5) +
   labs(title="Relationship between TFR and LifeExpB", 
        y="Total Fertility Rate", x="Life Expectancy at Birth")
