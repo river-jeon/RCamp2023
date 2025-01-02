@@ -1,4 +1,4 @@
-# RCamp2024
+# RCamp2025
 
 Five day R crash course
 
